@@ -3,7 +3,8 @@ include("../../../include/functions.html");
 $key = $_REQUEST["key"];
 $resultset = pg_query($CONN, "
 	select
-		payload
+		payload,
+		filename
 	from
 		download,
 		payload
@@ -18,6 +19,11 @@ if (pg_num_rows($resultset) != 1) {
 }
 $result = pg_fetch_object($resultset, 0);
 $payload = base64_decode($result->payload);
-header("Content-Type: text/plain");
+$filesize = strlen($payload);
+$filename = $result->filename;
+header("Content-type: application/download");
+header("Content-length: $filesize");
+header("Content-transfer-encodig: binary");
+header("Content-disposition: attachment; filename=$filename");
 print("$payload");
 ?>
