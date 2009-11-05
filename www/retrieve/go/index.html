@@ -8,7 +8,7 @@ if ($_SESSION["sum"] != $_REQUEST["captcha"]) {
 	print("<meta http-equiv='refresh' content='0;url=/retrieve'>");
 	exit(0);
 }
-include("../../include/above.php");
+include("../../include/above.html");
 
 
 $resultset = pg_query($CONN, "
@@ -50,5 +50,5 @@ To access your deposit(s), see:
 	error("No deposits were found");
 }
 
-include("../../include/below.php");
+include("../../include/below.html");
 ?>

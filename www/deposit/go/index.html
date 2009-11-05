@@ -1,5 +1,5 @@
 <?php
-include("../../include/above.php");
+include("../../include/above.html");
 
 $email = strtolower($_REQUEST["email"]);
 $note = $_REQUEST["note"];
@@ -33,5 +33,5 @@ if (pg_num_rows($resultset) == 1) {
 	error("An error has occurred");
 }
 
-include("../../include/below.php");
+include("../../include/below.html");
 ?>
