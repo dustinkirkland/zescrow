@@ -2,8 +2,7 @@
 -- PostgreSQL database dump
 --
 
-SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
+SET client_encoding = 'SQL_ASCII';
 SET standard_conforming_strings = off;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
@@ -38,7 +37,9 @@ CREATE TABLE payload (
     expiration timestamp with time zone DEFAULT (now() + '1 year'::interval),
     note text,
     payload text NOT NULL,
-    email text NOT NULL
+    email text NOT NULL,
+    md5 text,
+    sha1 text
 );
 
 
@@ -49,7 +50,6 @@ ALTER TABLE public.payload OWNER TO postgres;
 --
 
 CREATE SEQUENCE payload_id_seq
-    START WITH 1
     INCREMENT BY 1
     NO MAXVALUE
     NO MINVALUE
