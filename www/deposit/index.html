@@ -6,26 +6,31 @@ include("../include/above.html");
 <form id="upload" method="post" action="go/" enctype="multipart/form-data">
 <table>
   <tr>
-    <td>Email address</td>
+    <td><b>Email address</b></td>
     <td><input name="email" type="text" tabindex="1"></td>
+    <td><small><i>This deposit is only as secure as your email account!</i></small></td>
   </tr>
   <tr>
-    <td>File to deposit (10KB max)</td>
+    <td><b>File to deposit</b></td>
     <td><input name="payload" type="file" tabindex="2"></td>
+    <td><small><i>10KB max, e.g. ~/.ecryptfs/wrapped-passphrase</i></small></td>
   </tr>
   <tr>
-    <td>Note-to-self</td>
+    <td><b>Note-to-self</b></td>
     <td><input name="note" type="text" tabindex="3"></td>
+    <td><small><i>You can leave yourself a reminder, such as the hostname and/or filename that you are escrowing.</i></small></td>
   </tr>
 <!--
   <tr>
-    <td>Are you a human?</td>
-    <td><?php print(rand(1000, 1) . " + " . rand(10, 1) . " = "); ?><input type=text size=5 name=captcha></td>
+    <td><b><?php print(rand(1000, 1) . " + " . rand(10, 1) . " = "); ?></b></td>
+    <td><input type=text size=5 name=captcha></td>
+    <td><small><i>Are you a human?</i></small></td>
   </tr>
 -->
   <tr>
-    <td>Billing information</td>
-    <td><i>Google Checkout, $1/year to store, $10/retrieval to recover</i></td>
+    <td><b>Billing information</b></td>
+    <td></td>
+    <td><small><i>FREE to store, $20/retrieval to recover</i></small></td>
   </tr>
   <tr>
     <td></td>
