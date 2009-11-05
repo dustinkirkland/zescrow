@@ -6,11 +6,11 @@ include("credentials.html");
 $CONN = pg_pconnect("host=localhost dbname=$DBNAME user=$DBUSER password=$DBPASSWORD");
 
 function genkey() {
-	$max = 1000000000000000000;
-	$count = 1;
+	$max = 2147483647;
+	$count = 4;
 	$key = "";
 	for ($i=0; $i<$count; $i++) {
-		$key .= rand($max, 1);
+		$key .= rand(1, $max);
 	}
 	return $key;
 }
