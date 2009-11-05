@@ -1,0 +1,37 @@
+  BODY                  {
+    font-size:          13px;
+    font-family:        verdana,arial,helvetica,sans-serif;
+    font-weight:        400;
+    color:              #000000;
+    text-align:         left;
+    margin-top:		0px;
+    margin-bottom:	0px;
+    margin-left:	0px;
+    margin-right:	0px;
+  }
+  LI                       {line-height: 120%;}
+  A                        {text-decoration: none; color: #138013;}
+  A:hover                  {text-decoration: underline; }
+  A.logo		   {text-decoration: none; color: #0d580d}
+  P, DIV                   {border: 0px; margin: 0px; padding: 0px;}
+  B                        {font-weight: 700;}
+  FORM                     {margin: 0px;}
+  SELECT                   {font-size: 13px;}
+  INPUT                    {font-size: 13px;}
+  BR.h5                    {font-size: 5px; line-height: 5px;}
+  BR.h6                    {font-size: 6px; line-height: 6px;}
+  BR.h8                    {font-size: 8px; line-height: 8px;}
+  BR.h10                   {font-size: 10px; line-height: 10px;}
+  BR.h12                   {font-size: 12px; line-height: 12px;}
+  BR.text_spacer           {font-size: 20px; line-height: 20px;}
+  BR.field_spacer          {font-size: 28px; line-height: 28px;}
+  BR.field_spacer_opt      {font-size: 35px; line-height: 35px;}
+  BR.ir_spacer             {font-size: 20px; line-height: 20px;}
+  BLOCKQUOTE.ir            {margin: 0px 0px 5px 10px;}
+  UL.irlist                {margin: 0px 5px 0px 15px;}
+  OL.irolist               {margin: 0px 5px 0px 35px;}
+  A.tab                    {text-decoration: none; color:#dddddd; font-weight: 700;}
+  A.tab:hover              {text-decoration: underline; }
+  TD.fore                  {background-color: #18a418} 
+  TD.back                  {background-color: #0d580d}
+  IMG                      {border: 0px; vertical-align: bottom}
