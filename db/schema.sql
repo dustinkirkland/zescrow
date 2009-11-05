@@ -39,7 +39,8 @@ CREATE TABLE payload (
     payload text NOT NULL,
     email text NOT NULL,
     md5 text,
-    sha1 text
+    sha1 text,
+    filename text
 );
 
 
