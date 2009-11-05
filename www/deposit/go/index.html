@@ -20,6 +20,7 @@ $resultset = pg_query($CONN, "
 		email,
 		note,
 		filename,
+		filesize,
 		md5,
 		sha1,
 		payload
@@ -29,6 +30,7 @@ $resultset = pg_query($CONN, "
 		'" . pg_escape_string($email) . "',
 		'" . pg_escape_string($note) . "',
 		'" . pg_escape_string($filename) . "',
+		'" . pg_escape_string($filesize) . "',
 		'" . pg_escape_string($md5) . "',
 		'" . pg_escape_string($sha1) . "',
 		'" . pg_escape_string($payload) . "'

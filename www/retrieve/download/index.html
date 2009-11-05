@@ -9,6 +9,8 @@ include("../../include/above.html");
 <table width="600">
   <tr>
     <th>Date of Deposit</th>
+    <th>File name</th>
+    <th>File size</th>
     <th>Note to self</th>
     <th></th>
   </tr>
@@ -27,7 +29,9 @@ $resultset = pg_query($CONN, "
 	select
 		payload.id as id,
 		payload.creation as uploaded,
-		payload.note as note
+		payload.note as note,
+		payload.filesize as filesize,
+		payload.filename as filename
 	from
 		retrieval,
 		payload
@@ -55,6 +59,8 @@ for ($i=0; $i<pg_num_rows($resultset); $i++) {
 	print("
   <tr>
     <td>" . preg_replace("/\..*$/", "", $result->uploaded) . "</td>
+    <td>" . $result->filename . "</td>
+    <td>" . $result->filesize . " bytes</td>
     <td>" . $result->note . "</td>
     <td align=center><input type='hidden' name='key' value='$key'><input type='submit' value='Download'></td>
   </tr>
