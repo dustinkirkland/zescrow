@@ -19,9 +19,9 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE download (
-    payload_id integer NOT NULL,
     key text NOT NULL,
-    expiration timestamp with time zone DEFAULT (now() + '00:15:00'::interval)
+    expiration timestamp with time zone DEFAULT (now() + '00:15:00'::interval),
+    payload_id integer NOT NULL
 );
 
 
@@ -38,9 +38,10 @@ CREATE TABLE payload (
     note text,
     payload text NOT NULL,
     email text NOT NULL,
-    md5 text,
-    sha1 text,
-    filename text
+    filename text NOT NULL,
+    filesize integer NOT NULL,
+    md5 text NOT NULL,
+    sha1 text NOT NULL
 );
 
 
