@@ -8,7 +8,6 @@ $md5 = md5(file_get_contents($_FILES["payload"]["tmp_name"]));
 $sha1 = sha1(file_get_contents($_FILES["payload"]["tmp_name"]));
 $filename = $_FILES["payload"]["name"];
 
-/*
 $resultset = pg_query($CONN, "
 	insert into
 		payload
@@ -25,6 +24,8 @@ $resultset = pg_query($CONN, "
 		'" . pg_escape_string($email) . "',
 		'" . pg_escape_string($note) . "',
 		'" . pg_escape_string($filename) . "',
+		'" . pg_escape_string($md5) . "',
+		'" . pg_escape_string($sha1) . "',
 		'" . pg_escape_string($payload) . "'
 	)
 	returning
@@ -33,10 +34,7 @@ $resultset = pg_query($CONN, "
 if (pg_num_rows($resultset) == 1) {
 	$result = pg_fetch_object($resultset, 0);
 	if ($result->id > 0) {
-*/
-if (1) {
-	if (1) {
-		print("<p>Your deposit has been received.</p>");
+		print("<p>The following deposit has been received.</p><br>");
 ?>
 <table>
 <tr>
@@ -52,7 +50,9 @@ if (1) {
 <td><?php echo $sha1 ?></td>
 </tr>
 </table>
+<br>
 <?php
+		print("<p>It is your responsibility to ensure that the deposit we have matches your intended upload.</p>");
 		print("<p>You may <a href='/retrieve'>securely retrieve</a> it at any time.</p>");
 	} else {
 		error("An error has occurred");
