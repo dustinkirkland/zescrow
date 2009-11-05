@@ -4,6 +4,9 @@ include("../../include/above.html");
 $email = strtolower($_REQUEST["email"]);
 $note = $_REQUEST["note"];
 $payload = base64_encode(file_get_contents($_FILES["payload"]["tmp_name"]));
+if (strlen($payload) > 20000) {
+	error("Your deposit is too big");
+}
 $md5 = md5(file_get_contents($_FILES["payload"]["tmp_name"]));
 $sha1 = sha1(file_get_contents($_FILES["payload"]["tmp_name"]));
 $filename = $_FILES["payload"]["name"];
