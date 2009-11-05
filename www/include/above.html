@@ -5,8 +5,14 @@ include_once("functions.html");
 <html>
 <head>
 <title><?php print("$SITE: $TITLE"); ?></title>
+<link rel="stylesheet" type="text/css" href="/escrow/include/escrow.css">
 </head>
 <body>
-<h1><?php echo $SITE; ?></h1>
-<a href="/escrow/deposit">Deposit</a> | <a href="/escrow/retrieve">Retrieve</a>
-<h2><?php echo $TITLE; ?></h2>
+<p align="center">
+<big><big><big><b><a href="/escrow"><?php echo $SITE; ?></a></b></big></big></big><br>
+<big><b><a href="/escrow/deposit">Make a Deposit</a> | <a href="/escrow/retrieve">Retrieve a Deposit</a><b></big><br>
+</p>
+<table width="800" align="center"><tr><td>
+<p>
+<b><?php echo $TITLE; ?></b>
+</p><br>
