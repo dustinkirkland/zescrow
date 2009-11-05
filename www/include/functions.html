@@ -1,8 +1,9 @@
 <?php
 $SITE = "KeyEscrow.net";
-$URL = "https://www.$SITE.com";
+$URL = "https://www.$SITE.com/escrow";
 $URL = "http://192.168.122.147";
-$CONN = pg_pconnect("host=localhost dbname=escrow user=postgres password=postgres");
+include("credentials.html");
+$CONN = pg_pconnect("host=localhost dbname=$DBNAME user=$DBUSER password=$DBPASSWORD");
 
 function genkey() {
 	$max = 1000000000000000000;
