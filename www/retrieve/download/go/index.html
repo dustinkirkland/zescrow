@@ -18,5 +18,6 @@ if (pg_num_rows($resultset) != 1) {
 }
 $result = pg_fetch_object($resultset, 0);
 $payload = base64_decode($result->payload);
+header("Content-Type: text/plain");
 print("$payload");
 ?>
