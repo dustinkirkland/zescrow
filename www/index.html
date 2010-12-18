@@ -6,7 +6,7 @@ include("include/above.html");
 
 <p>KeyEscrow.net is sort of a digital equivalent of that concept, originally designed for <a href=http://launchpad.net/ecryptfs>eCryptfs</a> users who choose to encrypt their private data using a strong, randomly generated key.</p><br>
 
-<p>Users of <a href=http://www.ubuntu.com>Ubuntu</a>'s Encrypted Home Directory are prompted on first boot to record their long, random mount passkey.  These users <i>should</i> print it out, write it down, and store the hard copy in a safe, secure physical location.  These users may additionally choose to <a href=/deposit>deposit</a> an extra copy of their <code>~/.ecryptfs/wrapped-passphrase</code> file here at KeyEscrow.net, "just in case", such that they can <a href=/retrieve>retrieve</a> it later if ever necessary.  Note that <code>wrapped-passphrase</code> is already encrypted with your login passphrase.</p><br>
+<p>Users of <a href=http://www.ubuntu.com>Ubuntu</a>'s Encrypted Home Directory are prompted on first boot to record their long, random mount passkey.  These users <i>should</i> print it out, write it down, and store the hard copy in a safe, secure physical location.  Some of these users may choose to <a href=/deposit>deposit</a> a copy of their <code>~/.ecryptfs/wrapped-passphrase</code> file here at KeyEscrow.net, "just in case", such that they can digitally <a href=/retrieve>retrieve</a> it later if necessary.  Note that <code>wrapped-passphrase</code> is already encrypted with a login passphrase.</p><br>
 
 <?php
 include("include/below.html");
