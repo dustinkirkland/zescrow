@@ -1,7 +1,7 @@
 <?php
 session_start();
 $email = strtolower($_REQUEST["email"]);
-if ($_SESSION["sum"] != $_REQUEST["captcha"]) {
+if ($_SESSION["sum"] != $_REQUEST["captcha"] || $_REQUEST["terms"] != "on") {
         $_SESSION["sum"] = -1;
         $_SESSION["email"] = $email;
         $_SESSION["note"] = $_REQUEST["note"];

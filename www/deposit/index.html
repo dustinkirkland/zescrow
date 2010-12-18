@@ -26,13 +26,14 @@ $_SESSION["sum"] = $a + $b;
   </tr>
   <tr>
     <td><b><?php print("$a + $b = "); ?></b></td>
-    <td><input type=text size=5 name=captcha></td>
+    <td><input type=text size=5 name=captcha tabindex="4"></td>
     <td><small><i>Are you a human?</i></small></td>
   </tr>
   <tr>
-    <td></td>
-    <td></td>
-    <td><input type=submit value=Upload tabindex="4"></td>
+    <td colspan=3><center><br><input type=checkbox name=terms tabindex="5">I have read and agree to the <a href=/terms.html>Terms of Service</a> and the <a href=/privacy.html>Privacy Statement</a>.<br></center></td>
+  </tr>
+  <tr>
+    <td colspan=3><center><input type=submit value=Upload tabindex="6"></center></td>
   </tr>
 </table>
 </form>
