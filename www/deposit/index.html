@@ -1,13 +1,17 @@
 <?php
+session_start();
 $TITLE = "Make a Deposit";
 include("../include/above.html");
+$a = rand(1000, 1);
+$b = rand(10, 1);
+$_SESSION["sum"] = $a + $b;
 ?>
 
 <form id="upload" method="post" action="go/" enctype="multipart/form-data">
 <table align="center">
   <tr>
     <td><b>Email address</b></td>
-    <td><input name="email" type="text" tabindex="1"></td>
+    <td><input name="email" type="text" tabindex="1" value="<?php echo $_SESSION['email'] ?>"></td>
     <td><small><i>This deposit is only as secure as your email account!</i></small></td>
   </tr>
   <tr>
@@ -17,20 +21,13 @@ include("../include/above.html");
   </tr>
   <tr>
     <td><b>Note-to-self</b></td>
-    <td><input name="note" type="text" tabindex="3"></td>
+    <td><input name="note" type="text" tabindex="3" value="<?php echo $_SESSION['note'] ?>"></td>
     <td><small><i>You can leave yourself a reminder about this deposit</i></small></td>
   </tr>
-<!--
   <tr>
-    <td><b><?php print(rand(1000, 1) . " + " . rand(10, 1) . " = "); ?></b></td>
+    <td><b><?php print("$a + $b = "); ?></b></td>
     <td><input type=text size=5 name=captcha></td>
     <td><small><i>Are you a human?</i></small></td>
-  </tr>
--->
-  <tr>
-    <td><b>Billing information</b></td>
-    <td>FREE*</td>
-    <td><small><i>*FREE to store</i></small></td>
   </tr>
   <tr>
     <td></td>

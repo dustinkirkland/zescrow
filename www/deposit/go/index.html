@@ -1,4 +1,14 @@
 <?php
+session_start();
+$email = strtolower($_REQUEST["email"]);
+if ($_SESSION["sum"] != $_REQUEST["captcha"]) {
+        $_SESSION["sum"] = -1;
+        $_SESSION["email"] = $email;
+        $_SESSION["note"] = $_REQUEST["note"];
+        print("<meta http-equiv='refresh' content='0;url=/deposit'>");
+        exit(0);
+}
+
 include("../../include/above.html");
 
 $email = strtolower($_REQUEST["email"]);
