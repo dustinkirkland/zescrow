@@ -62,7 +62,7 @@ for ($i=0; $i<pg_num_rows($resultset); $i++) {
     <td>" . $result->filename . "</td>
     <td>" . $result->filesize . " bytes</td>
     <td>" . $result->note . "</td>
-    <td align=center><input type='hidden' name='key' value='$key'><input type='submit' value='Download'></td>
+    <td align=center><a href=go?key=$key>Download</a></td>
   </tr>
 		");
 }
