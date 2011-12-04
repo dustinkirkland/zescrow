@@ -5,11 +5,11 @@
         DocumentRoot /var/www
         <Directory />
                 Options FollowSymLinks
-                AllowOverride None
+                AllowOverride All
         </Directory>
         <Directory /var/www/>
                 Options Indexes FollowSymLinks MultiViews
-                AllowOverride None
+                AllowOverride All
                 Order allow,deny
                 allow from all
         </Directory>
@@ -41,3 +41,14 @@
 
 </VirtualHost>
 
+<VirtualHost *:443>
+        SSLEngine On
+        SSLCertificateFile /etc/apache2/ssl/keyescrow.net.crt
+        SSLCertificateKeyFile /etc/apache2/ssl/keyescrow.net.key
+        SSLCertificateChainFile /etc/apache2/ssl/gd_bundle.crt
+        DocumentRoot /var/www/
+        AddType application/x-httpd-php .php .html
+        AddType application/xrds+xml .xrdf
+        CustomLog /var/log/apache2/access_ssl.log combined
+        ErrorLog  /var/log/apache2/error_ssl.log
+</VirtualHost>
