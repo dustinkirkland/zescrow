@@ -28,7 +28,7 @@ if ($_REQUEST["terms"] != "on") {
         print("<meta http-equiv='refresh' content='0;url=/deposit'>");
         exit(0);
 }
-$_SESSION["email"] = strtolower($_SESSION["email"]);
+$_SESSION["email"] = strtolower(urldecode($_SESSION["email"]));
 
 include("../../include/above.html");
 

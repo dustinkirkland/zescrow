@@ -29,7 +29,7 @@ if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	redirect("/openid/");
 }
 unset($_SESSION["return"]);
-$_SESSION["email"] = strtolower($_SESSION["email"]);
+$_SESSION["email"] = strtolower(urldecode($_SESSION["email"]));
 $TITLE = "Retrieve a Deposit";
 include("../include/above.html");
 ?>

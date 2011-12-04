@@ -24,7 +24,7 @@
 
 $TITLE = "";
 session_start();
-$_SESSION["email"] = strtolower($_SESSION["email"]);
+$_SESSION["email"] = strtolower(urldecode($_SESSION["email"]));
 include("../../include/above.html");
 
 $resultset = pg_query($CONN, "
