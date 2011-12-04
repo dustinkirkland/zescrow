@@ -4,5 +4,21 @@
 sudo apt-get install byobu bzr apache2 libapache2-mod-php5 postgresql php5-pgsql etckeeper ccze
 
 # Branch code
-cd /var/www
-bzr branch lp:keyescrow
+cd /srv
+sudo bzr branch lp:keyescrow
+sudo mv /var/www/ /var/www.orig
+
+# Configure apache, enable site
+sudo a2dissite default
+sudo cp /srv/keyescrow/etc/apache_config.CHANGE_ME /etc/apache2/sites-available/keyescrow
+sudo a2ensite keyescrow
+sudo service apache2 restart
+
+# Create database
+pw=$(pwgen -s 30 | head -n1)
+su - postgres -c "createdb keyescrow && psql -f /srv/keyescrow/db/schema.sql keyescrow"
+su - postgres -c "psql -c \"alter user postgres with password '$pw'\" keyescrow"
+sudo cp /srv/keyescrow/www/include/credentials.html.CHANGE_ME /srv/keyescrow/www/include/credentials.html
+sudo chmod 640 /srv/keyescrow/www/include/credentials.html
+sudo chown root:www-data /srv/keyescrow/www/include/credentials.html
+sudo sed -i "s/___password___/$pw/g" /srv/keyescrow/www/include/credentials.html
