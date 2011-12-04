@@ -1,0 +1,8 @@
+# Install Ubuntu
+
+# Install addtional packages
+sudo apt-get install byobu bzr apache2 libapache2-mod-php5 postgresql php5-pgsql etckeeper ccze
+
+# Branch code
+cd /var/www
+bzr branch lp:keyescrow
