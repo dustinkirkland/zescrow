@@ -25,14 +25,12 @@
 require_once("../include/functions.html");
 session_start();
 $TITLE = "Make a Deposit";
-$a = rand(1000, 1);
-$b = rand(10, 1);
-$_SESSION["sum"] = $a + $b;
-if (!isset($_SESSION["email"])) {
+if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	$_SESSION["return"] = "/deposit";
 	redirect("/openid/");
 }
-unset($_SESSION["return"] = "");
+unset($_SESSION["return"]);
+$_SESSION['email'] = strtolower($_SESSION['email']);
 include("../include/above.html");
 ?>
 
@@ -40,7 +38,7 @@ include("../include/above.html");
 <table align="center">
   <tr>
     <td><b>Email address</b></td>
-    <td><input name="email" type="text" tabindex="1" value="<?php echo $_SESSION['email'] ?>"></td>
+    <td><?php echo $_SESSION['email'] ?></td>
     <td><small><i>This deposit is only as secure as your email account!</i></small></td>
   </tr>
   <tr>
@@ -49,14 +47,9 @@ include("../include/above.html");
     <td><small><i>10KB max,<br>e.g. ~/.ecryptfs/wrapped-passphrase</i></small></td>
   </tr>
   <tr>
-    <td><b>Note-to-self</b></td>
+    <td><b>Note to self</b></td>
     <td><input name="note" type="text" tabindex="3" value="<?php echo $_SESSION['note'] ?>"></td>
     <td><small><i>You can leave yourself a reminder about this deposit</i></small></td>
-  </tr>
-  <tr>
-    <td><b><?php print("$a + $b = "); ?></b></td>
-    <td><input type=text size=5 name=captcha tabindex="4"></td>
-    <td><small><i>Are you a human?</i></small></td>
   </tr>
   <tr>
     <td colspan=3><center><br><input type=checkbox name=terms tabindex="5">I have read and agree to the <a href=/terms.html>Terms of Service</a> and the <a href=/privacy.html>Privacy Statement</a>.<br></center></td>

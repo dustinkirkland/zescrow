@@ -23,18 +23,15 @@
 */
 
 session_start();
-$email = strtolower($_REQUEST["email"]);
-if ($_SESSION["sum"] != $_REQUEST["captcha"] || $_REQUEST["terms"] != "on") {
-        $_SESSION["sum"] = -1;
-        $_SESSION["email"] = $email;
+if ($_REQUEST["terms"] != "on") {
         $_SESSION["note"] = $_REQUEST["note"];
         print("<meta http-equiv='refresh' content='0;url=/deposit'>");
         exit(0);
 }
+$_SESSION["email"] = strtolower($_SESSION["email"]);
 
 include("../../include/above.html");
 
-$email = strtolower($_REQUEST["email"]);
 $note = $_REQUEST["note"];
 $contents = file_get_contents($_FILES["payload"]["tmp_name"]);
 $payload = base64_encode($contents);
@@ -60,7 +57,7 @@ $resultset = pg_query($CONN, "
 	)
 	values
 	(
-		'" . pg_escape_string($email) . "',
+		'" . pg_escape_string($_SESSION["email"]) . "',
 		'" . pg_escape_string($note) . "',
 		'" . pg_escape_string($filename) . "',
 		'" . pg_escape_string($filesize) . "',
@@ -77,9 +74,10 @@ if (pg_num_rows($resultset) == 1) {
 		print("<p>The following deposit has been received.</p><br>");
 ?>
 <table>
-<tr> <th>File name</th> <td><?php echo $filename ?></td> </tr>
-<tr> <th>File size</th> <td><?php echo "$filesize bytes" ?></td> </tr>
-<tr> <th>md5</th> <td><?php echo $md5 ?></td> </tr>
+<tr> <td><b>Email</b></td> <td><?php echo $_SESSION["email"]?></td> </tr>
+<tr> <td><b>File name</b></td> <td><?php echo $filename ?></td> </tr>
+<tr> <td><b>File size</b></td> <td><?php echo "$filesize bytes" ?></td> </tr>
+<tr> <td><b>md5</b></td> <td><?php echo $md5 ?></td> </tr>
 </table>
 <br>
 <?php

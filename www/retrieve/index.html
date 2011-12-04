@@ -24,15 +24,12 @@
 
 require_once("../include/functions.html");
 session_start();
-if ($_SESSION["sum"] == -1) {
-	$tryagain = 1;
-}
-if (!isset($_SESSION["email"])) {
+if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	$_SESSION["return"] = "/retrieve";
 	redirect("/openid/");
 }
 unset($_SESSION["return"]);
-$email = $_SESSION["email"];
+$_SESSION["email"] = strtolower($_SESSION["email"]);
 $TITLE = "Retrieve a Deposit";
 include("../include/above.html");
 ?>
@@ -40,31 +37,11 @@ include("../include/above.html");
 <form method="post" action="go/">
 <table align="center">
   <tr>
-    <td><b>Email address</b></td>
-    <td><input name="email" type="text" value="<?php echo $email; ?>" tabindex="1"></td>
+    <td><b>Email</b></td>
+    <td><?php echo $_SESSION["email"]; ?></td>
   </tr>
   <tr>
-    <td>
-<?php
-$a = rand(1000, 1);
-$b = rand(10, 1);
-$_SESSION["sum"] = $a + $b;
-print("<b>$a + $b = </b>");
-?>
-    </td>
-    <td><input type="text" size="5" name="captcha" tabindex="2"></td>
-    <td>
-<?php
-	if ($tryagain) {
-		print("<i>Try again</i>");
-	}
-?>
-    </td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td><input type="submit" value="Retrieve" tabindex="3"></td>
+    <td colspan=3 align=center><input type="submit" value="Retrieve" tabindex="3"></td>
   </tr>
 </table>
 </form>

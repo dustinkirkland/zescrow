@@ -24,15 +24,8 @@
 
 $TITLE = "";
 session_start();
-$email = strtolower($_REQUEST["email"]);
-if ($_SESSION["sum"] != $_REQUEST["captcha"]) {
-	$_SESSION["sum"] = -1;
-	$_SESSION["email"] = $email;
-	print("<meta http-equiv='refresh' content='0;url=/retrieve'>");
-	exit(0);
-}
+$_SESSION["email"] = strtolower($_SESSION["email"]);
 include("../../include/above.html");
-
 
 $resultset = pg_query($CONN, "
 	select
@@ -40,7 +33,7 @@ $resultset = pg_query($CONN, "
 	from
 		payload
 	where
-		email='" . pg_escape_string($email) . "'
+		email='" . pg_escape_string($_SESSION["email"]) . "'
 ");
 
 if (pg_num_rows($resultset) >= 1) {
@@ -54,7 +47,7 @@ if (pg_num_rows($resultset) >= 1) {
 		)
 		values
 		(
-			'" . pg_escape_string($email) . "',
+			'" . pg_escape_string($_SESSION["email"]) . "',
 			'" . $key . "'
 		)
 	");
@@ -66,8 +59,8 @@ To access your deposit(s), see:
 </pre>
 
 ";
-	mailer($email, $key);
-	print("<center>Access instructions have been emailed to [" . $email . "]</center>");
+	mailer($_SESSION["email"], $key);
+	print("<center>Access instructions have been emailed to [" . $_SESSION["email"] . "]</center>");
 } else {
 	error("No deposits were found");
 }
