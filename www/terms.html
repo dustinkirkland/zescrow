@@ -142,20 +142,4 @@ written or oral, regarding such subject matter. Any waiver of any provision
 of the Terms of Service will be effective only if in writing and signed 
 by KeyEscrow.net. </p><br>
 
-<?php
-if (isset($_SESSION["KEY"]) && !isset($_SESSION["LEGAL"])) {
-?>
-  <table border=0 width=100%>
-    <tr>
-      <td align=center width=50%><a href=decline.html>I DECLINE <br>THESE TERMS</a></td>
-      <td align=center width=50%><a href=accept.html>I ACCEPT <br>THESE TERMS</a></td>
-    </tr>
-  </table>
-  <br> 
-<?php
-} elseif (isset($_SESSION["LEGAL"])) {
-      print("<p align=center><b>You accepted these Terms of Service on " . clean_ts($_SESSION["LEGAL"]) . "</b></p>");
-}
-?>
-
 <?php include("include/below.html"); ?>
