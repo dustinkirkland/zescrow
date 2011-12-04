@@ -22,10 +22,16 @@
 
 */
 
+require_once("../include/functions.html");
 session_start();
 if ($_SESSION["sum"] == -1) {
 	$tryagain = 1;
 }
+if (!isset($_SESSION["email"])) {
+	$_SESSION["return"] = "/retrieve";
+	redirect("/openid/");
+}
+unset($_SESSION["return"]);
 $email = $_SESSION["email"];
 $TITLE = "Retrieve a Deposit";
 include("../include/above.html");

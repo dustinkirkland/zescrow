@@ -22,12 +22,18 @@
 
 */
 
+require_once("../include/functions.html");
 session_start();
 $TITLE = "Make a Deposit";
-include("../include/above.html");
 $a = rand(1000, 1);
 $b = rand(10, 1);
 $_SESSION["sum"] = $a + $b;
+if (!isset($_SESSION["email"])) {
+	$_SESSION["return"] = "/deposit";
+	redirect("/openid/");
+}
+unset($_SESSION["return"] = "");
+include("../include/above.html");
 ?>
 
 <form id="upload" method="post" action="go/" enctype="multipart/form-data">

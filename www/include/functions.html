@@ -55,4 +55,9 @@ Access your deposit(s) at:
 	return $rc;
 }
 
+function redirect($url) {
+        print("<meta http-equiv='refresh' content='0;url=$url'>");
+        exit;
+}
+
 ?>
