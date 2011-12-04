@@ -12,12 +12,13 @@ sudo mv /var/www/ /var/www.orig
 sudo a2dissite default
 sudo cp /srv/keyescrow/etc/apache_config.CHANGE_ME /etc/apache2/sites-available/keyescrow
 sudo a2ensite keyescrow
+sudo a2enmod ssl
 sudo service apache2 restart
 
 # Create database
 pw=$(pwgen -s 30 | head -n1)
-su - postgres -c "createdb keyescrow && psql -f /srv/keyescrow/db/schema.sql keyescrow"
-su - postgres -c "psql -c \"alter user postgres with password '$pw'\" keyescrow"
+sudo su - postgres -c "createdb keyescrow && psql -f /srv/keyescrow/db/schema.sql keyescrow"
+sudo su - postgres -c "psql -c \"alter user postgres with password '$pw'\" keyescrow"
 sudo cp /srv/keyescrow/www/include/credentials.html.CHANGE_ME /srv/keyescrow/www/include/credentials.html
 sudo chmod 640 /srv/keyescrow/www/include/credentials.html
 sudo chown root:www-data /srv/keyescrow/www/include/credentials.html
