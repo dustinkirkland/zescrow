@@ -13,6 +13,7 @@ sudo a2dissite default
 sudo cp /srv/keyescrow/etc/apache_config.CHANGE_ME /etc/apache2/sites-available/keyescrow
 sudo a2ensite keyescrow
 sudo a2enmod ssl
+sudo a2enmod rewrite
 sudo service apache2 restart
 
 # Create database
