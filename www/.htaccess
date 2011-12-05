@@ -1,0 +1,18 @@
+ErrorDocument 404 /not-found
+AddType application/x-httpd-php .php .html
+AddType application/xrds+xml .xrdf
+RewriteEngine On
+
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP_HOST} !^www\.
+RewriteCond %{REQUEST_FILENAME} !^google
+RewriteRule ^(.*) https://www.%{SERVER_NAME}/$1 [R,L]
+
+RewriteCond %{HTTPS} =on
+RewriteCond %{HTTP_HOST} !^www\.
+RewriteRule ^(.*) https://www.%{SERVER_NAME}/$1 [R,L]
+
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*) https://%{SERVER_NAME}/$1 [R,L]
+
+Options -Indexes
