@@ -1,4 +1,4 @@
-ErrorDocument 404 /not-found
+ErrorDocument 404 /not-found/index.html
 AddType application/x-httpd-php .php .html
 AddType application/xrds+xml .xrdf
 RewriteEngine On
