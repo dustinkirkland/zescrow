@@ -1,7 +1,7 @@
 # Install Ubuntu
 
 # Install addtional packages
-sudo apt-get install byobu bzr apache2 libapache2-mod-php5 postgresql php5-pgsql etckeeper ccze php-openid
+sudo apt-get install byobu bzr apache2 libapache2-mod-php5 postgresql php5-pgsql etckeeper ccze dkim-filter
 
 # Branch code
 cd /srv
