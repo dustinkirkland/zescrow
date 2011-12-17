@@ -44,12 +44,12 @@ include("../include/above.html");
   <tr>
     <td><b>File to deposit</b></td>
     <td><input name="payload" type="file" tabindex="2"></td>
-    <td><small><i>10KB max,<br>e.g. ~/.ecryptfs/wrapped-passphrase</i></small></td>
+    <td><small><i>You can deposit a file, such as your encrypted ~/.ecryptfs/wrapped-passphrase.  If you store this file, you MUST remember your login passphrase.</i></small></td>
   </tr>
   <tr>
     <td><b>Text to deposit</b></td>
     <td><input name="note" type="text" tabindex="3" value="<?php echo $_SESSION['note'] ?>"></td>
-    <td><small><i>You can leave yourself a reminder about this deposit</i></small></td>
+    <td><small><i>Or you can deposit a string, such as your plain text mount passphrase.  You can retrieve this string by running </i><pre>ecryptfs-unwrap-passphrase</pre></small></td>
   </tr>
   <tr>
     <td colspan=3><center><br><input type=checkbox name=terms tabindex="5">I have read and agree to the <a href=/terms.html>Terms of Service</a> and the <a href=/privacy.html>Privacy Statement</a>.<br></center></td>
