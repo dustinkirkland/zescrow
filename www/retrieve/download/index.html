@@ -34,7 +34,7 @@ include("../../include/above.html");
     <th>Date of Deposit</th>
     <th>File name</th>
     <th>File size</th>
-    <th>Note to self</th>
+    <th>Text</th>
     <th></th>
   </tr>
 <?php
@@ -83,11 +83,18 @@ for ($i=0; $i<pg_num_rows($resultset); $i++) {
   <tr>
     <td>" . preg_replace("/\..*$/", "", $result->uploaded) . "</td>
     <td>" . $result->filename . "</td>
-    <td>" . $result->filesize . " bytes</td>
-    <td>" . $result->note . "</td>
-    <td align=center><a href=go?key=$key>Download</a></td>
-  </tr>
-		");
+	");
+	if ($result->filesize > 0) {
+		print("<td>" . $result->filesize . " bytes</td>");
+	} else {
+		print("<td></td>");
+	}
+	print("<td>" . $result->note . "</td>");
+	if ($result->filesize > 0) {
+		print("<td align=center><a href=go?key=$key>Download</a></td>");
+	} else {
+		print("<td></td></tr>");
+	}
 }
 for ($i=0; $i<pg_num_rows($resultset); $i++) {
 	$result = pg_fetch_object($resultset, $i);
