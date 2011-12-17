@@ -91,7 +91,7 @@ for ($i=0; $i<pg_num_rows($resultset); $i++) {
 	}
 	print("<td>" . $result->note . "</td>");
 	if ($result->filesize > 0) {
-		print("<td align=center><a href=go?key=$key>Download</a></td>");
+		print("<td align=center><a href=go?key=$key><img src=../../include/disk.png></a></td>");
 	} else {
 		print("<td></td></tr>");
 	}
