@@ -26,17 +26,6 @@ $TITLE = "Retrieve a deposit";
 include("../../include/above.html");
 ?>
 
-<p><b>You have the following deposits available for download:</b></p><br>
-
-<form method="post" action="go/">
-<table width="600">
-  <tr>
-    <th>Date of Deposit</th>
-    <th>File name</th>
-    <th>File size</th>
-    <th>Text</th>
-    <th></th>
-  </tr>
 <?php
 $resultset = pg_query($CONN, "
 	delete from
@@ -63,41 +52,54 @@ $resultset = pg_query($CONN, "
 		and
 		payload.email=retrieval.email
 ");
-for ($i=0; $i<pg_num_rows($resultset); $i++) {
-	$result = pg_fetch_object($resultset, $i);
-	$key = genkey();
-	pg_query($CONN, "
-		insert into
-			download
-		(
-			payload_id,
-			key
-		)
-		values
-		(
-			'" . $result->id . "',
-			'" . $key . "'
-		)
-	");
-	print("
+if (pg_num_rows($resultset) > 0) {
+?>
+<p><b>You have the following deposits available for download</b></p><br>
+<form method="post" action="go/">
+<table width="600">
   <tr>
-    <td>" . preg_replace("/\..*$/", "", $result->uploaded) . "</td>
+    <th>Date of Deposit</th>
+    <th>File name</th>
+    <th>File size</th>
+    <th>Text</th>
+    <th></th>
+  </tr>
+<?php
+	for ($i=0; $i<pg_num_rows($resultset); $i++) {
+		$result = pg_fetch_object($resultset, $i);
+		$key = genkey();
+		pg_query($CONN, "
+			insert into
+				download
+			(
+				payload_id,
+				key
+			)
+			values
+			(
+				'" . $result->id . "',
+				'" . $key . "'
+			)
+		");
+		print("
+  <tr>
+    <td	>" . preg_replace("/\..*$/", "", $result->uploaded) . "</td>
     <td>" . $result->filename . "</td>
-	");
-	if ($result->filesize > 0) {
-		print("<td>" . $result->filesize . " bytes</td>");
-	} else {
-		print("<td></td>");
+		");
+		if ($result->filesize > 0) {
+			print("<td>" . $result->filesize . " bytes</td>");
+		} else {
+			print("<td></td>");
+		}
+		print("<td>" . $result->note . "</td>");
+			if ($result->filesize > 0) {
+			print("<td align=center><a href=go?key=$key><img src=../../include/disk.png></a></td>");
+		} else {
+			print("<td></td></tr>");
+		}
 	}
-	print("<td>" . $result->note . "</td>");
-	if ($result->filesize > 0) {
-		print("<td align=center><a href=go?key=$key><img src=../../include/disk.png></a></td>");
-	} else {
-		print("<td></td></tr>");
-	}
-}
-for ($i=0; $i<pg_num_rows($resultset); $i++) {
-	$result = pg_fetch_object($resultset, $i);
+} else {
+	print("<p align=center>This retrieval is expired.<br>Please <a href=/retrieve>initiate</a> a new one.</p><br>");
 }
 ?>
 </table>
