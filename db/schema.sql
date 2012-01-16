@@ -61,11 +61,12 @@ CREATE TABLE payload (
     expiration timestamp with time zone DEFAULT (now() + '1 year'::interval),
     note text,
     payload text NOT NULL,
-    email text NOT NULL,
+    email text,
     filename text NOT NULL,
     filesize integer NOT NULL,
     md5 text NOT NULL,
-    sha1 text NOT NULL
+    sha1 text NOT NULL,
+    auth text
 );
 
 
