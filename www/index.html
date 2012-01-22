@@ -27,7 +27,7 @@ if (isset($_REQUEST["u"])) {
 	include_once("include/functions.html");
 	session_start();
 	$_SESSION["u"] = urldecode($_REQUEST["u"]);
-	redirect("/upload/go/");
+	redirect("/deposit/go/");
 }
 
 include("include/above.html");

@@ -2,7 +2,7 @@
 /*
 
     keyescrow: web application for securely escrowing keys
-    - upload/go/index.html: confirm an upload
+    - deposit/go/index.html: confirm a deposit
 
     Copyright (C) 2008-2012 Scot-Irish Lads, LLC
     Author: Dustin Kirkland <dustin.kirkland@gmail.com>
@@ -30,7 +30,7 @@ if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	if (isset($_REQUEST["u"])) {
 		$_SESSION["u"] = urldecode($_REQUEST["u"]);
 	}
-        $_SESSION["return"] = "/upload/go";
+        $_SESSION["return"] = "/deposit/go";
         redirect("/openid/");
 }
 if (isset($_REQUEST["u"]) && !isset($_SESSION["u"])) {
