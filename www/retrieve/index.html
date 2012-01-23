@@ -2,9 +2,9 @@
 /*
 
     keyescrow: web application for securely escrowing keys
-    - retrive/index.html: retrieve a deposit
+    - retrieve/index.html: list deposits for download
 
-    Copyright (C) 2008-2011 Scot-Irish Lads, LLC
+    Copyright (C) 2008-2012 Scot-Irish Lads, LLC
     Author: Dustin Kirkland <dustin.kirkland@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -24,27 +24,67 @@
 
 require_once("../include/functions.html");
 session_start();
+$TITLE = "Retrieve a deposit";
 if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	$_SESSION["return"] = "/retrieve";
 	redirect("/openid/");
 }
-unset($_SESSION["return"]);
-$_SESSION["email"] = strtolower(urldecode($_SESSION["email"]));
-$TITLE = "Retrieve a Deposit";
+$_SESSION["email"] = urldecode($_SESSION["email"]);
 include("../include/above.html");
 ?>
 
+<?php
+$resultset = pg_query($CONN, "
+	select
+		payload.id as id,
+		payload.creation as uploaded,
+		payload.note as note,
+		payload.filesize as filesize,
+		payload.md5 as md5,
+		payload.filename as filename
+	from
+		payload
+	where
+		payload.email='" . pg_escape_string(strtolower($_SESSION["email"])) . "'
+	order by
+		payload.creation desc
+");
+if (pg_num_rows($resultset) > 0) {
+?>
+<p align=center><b>You have the following deposits available for download:</b></p><br>
 <form method="post" action="go/">
-<table align="center">
+<table cellspacing=4 cellpadding=4 bgcolor=#EEEEEE>
   <tr>
-    <td><b>Email</b></td>
-    <td><?php echo $_SESSION["email"]; ?></td>
+    <th>Date of Deposit</th>
+    <th>File name</th>
+    <th>File size</th>
+    <th>MD5</th>
+    <th></th>
   </tr>
+<?php
+	for ($i=0; $i<pg_num_rows($resultset); $i++) {
+		$result = pg_fetch_object($resultset, $i);
+		if ($result->filesize > 0) {
+			print("
   <tr>
-    <td colspan=3 align=center><input type="submit" value="Retrieve" tabindex="3"></td>
-  </tr>
+    <td>" . preg_replace("/\..*$/", "", $result->uploaded) . "</td>
+    <td>" . $result->filename . "</td>
+			");
+			if ($result->filesize > 0) {
+				print("<td>" . $result->filesize . " bytes</td>");
+			} else {
+				print("<td></td>");
+			}
+			print("<td><small><code>" . $result->md5 . "</code></small></td>");
+			$id = $result->id;
+			print("<td align=center><a href=go?id=$id><img src=../../include/disk.png></a></td>");
+		}
+	}
+} else {
+	print("<p align=center>No deposits were found.</p><br>");
+}
+?>
 </table>
 </form>
-
 
 <?php include("../include/below.html"); ?>

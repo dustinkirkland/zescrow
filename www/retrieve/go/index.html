@@ -2,9 +2,9 @@
 /*
 
     keyescrow: web application for securely escrowing keys
-    - retrieve/go/index.html: retrieve a deposit
+    - retrieve/go/index.html: process a deposit retrieval
 
-    Copyright (C) 2008-2011 Scot-Irish Lads, LLC
+    Copyright (C) 2008-2012 Scot-Irish Lads, LLC
     Author: Dustin Kirkland <dustin.kirkland@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -22,48 +22,57 @@
 
 */
 
-$TITLE = "";
+include("../../include/functions.html");
 session_start();
-$_SESSION["email"] = strtolower(urldecode($_SESSION["email"]));
-include("../../include/above.html");
+$TITLE = "Download a deposit";
+$_SESSION["id"] = $_REQUEST["id"];
+if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
+	$_SESSION["return"] = "/retrieve";
+	redirect("/openid/");
+}
+$_SESSION["email"] = urldecode($_SESSION["email"]);
 
 $resultset = pg_query($CONN, "
 	select
-		id
+		payload,
+		filename
 	from
 		payload
 	where
-		email='" . pg_escape_string($_SESSION["email"]) . "'
+		payload.id='" . pg_escape_string($_SESSION["id"]) . "'
+		and
+		payload.email='" . pg_escape_string(strtolower($_SESSION["email"])) . "'
 ");
-
-if (pg_num_rows($resultset) >= 1) {
-	$key = genkey();
-	$resultset = pg_query($CONN, "
-		insert into
-			retrieval
-		(
-			email,
-			key
-		)
-		values
-		(
-			'" . pg_escape_string($_SESSION["email"]) . "',
-			'" . $key . "'
-		)
-	");
-	$body = "
-
-<pre>
-To access your deposit(s), see:
-	<a href='$URL/retrieve/download/?key=$key'>$URL/retrieve/download/?key=$key</a>
-</pre>
-
-";
-	mailer($_SESSION["email"], $key);
-	print("<center>Access instructions have been emailed to [" . $_SESSION["email"] . "]</center>");
-} else {
-	error("No deposits were found");
+if (pg_num_rows($resultset) != 1) {
+	print("Error");
+	exit(0);
 }
-
-include("../../include/below.html");
+$result = pg_fetch_object($resultset, 0);
+$fingerprint = preg_replace("/\s+/", "", file_get_contents("../../gpg.fingerprint"));
+$res = gnupg_init();
+if (! gnupg_adddecryptkey($res, $fingerprint, "")) {
+	error("Server side key error");
+}
+if (! $payload = gnupg_decrypt($res, $result->payload)) {
+	error("Server side decryption error");
+}
+$filesize = strlen($payload);
+$filename = $result->filename;
+$resultset = pg_query($CONN, "
+	insert into
+		download
+	(
+		payload_id
+	)
+	values
+	(
+		'" . pg_escape_string($_SESSION["id"]) . "'
+	)
+");
+header("Content-type: application/download");
+header("Content-length: $filesize");
+header("Content-transfer-encodig: binary");
+header("Content-disposition: attachment; filename=$filename");
+header("Cache-Control: max-age=0, no-cache, must-revalidate");
+print($payload);
 ?>

@@ -2,9 +2,9 @@
 /*
 
     keyescrow: web application for securely escrowing keys
-    - deposit/go/index.html: make a deposit
+    - deposit/go/index.html: confirm a deposit
 
-    Copyright (C) 2008-2011 Scot-Irish Lads, LLC
+    Copyright (C) 2008-2012 Scot-Irish Lads, LLC
     Author: Dustin Kirkland <dustin.kirkland@gmail.com>
 
     This program is free software: you can redistribute it and/or modify
@@ -22,75 +22,62 @@
 
 */
 
+require_once("../../include/functions.html");
+
 session_start();
-if ($_REQUEST["terms"] != "on") {
-        $_SESSION["note"] = $_REQUEST["note"];
-        print("<meta http-equiv='refresh' content='0;url=/deposit'>");
-        exit(0);
+$TITLE = "Confirm a Deposit";
+if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
+	if (isset($_REQUEST["u"])) {
+		$_SESSION["u"] = urldecode($_REQUEST["u"]);
+	}
+        $_SESSION["return"] = "/deposit/go";
+        redirect("/openid/");
+}
+if (isset($_REQUEST["u"]) && !isset($_SESSION["u"])) {
+	$_SESSION["u"] = urldecode($_REQUEST["u"]);
 }
 $_SESSION["email"] = strtolower(urldecode($_SESSION["email"]));
+list($md5, $auth) = preg_split("/-/", $_SESSION["u"], 2);
 
 include("../../include/above.html");
 
-$note = $_REQUEST["note"];
-$contents = file_get_contents($_FILES["payload"]["tmp_name"]);
-$payload = base64_encode($contents);
-if (strlen($payload) > 15000) {
-	error("Your deposit is too big");
-}
-$filesize = strlen($contents);
-$md5 = md5($contents);
-$sha1 = sha1($contents);
-$filename = $_FILES["payload"]["name"];
-
 $resultset = pg_query($CONN, "
-	insert into
+	update
 		payload
-	(
-		email,
-		note,
+	set
+		email='" . pg_escape_string($_SESSION["email"]) . "',
+		registration=now()
+	where
+		email is null
+		  and
+		auth='" . pg_escape_string($auth) . "'
+		  and
+		md5='" . pg_escape_string($md5) . "'
+	returning
 		filename,
 		filesize,
-		md5,
-		sha1,
-		payload
-	)
-	values
-	(
-		'" . pg_escape_string($_SESSION["email"]) . "',
-		'" . pg_escape_string($note) . "',
-		'" . pg_escape_string($filename) . "',
-		'" . pg_escape_string($filesize) . "',
-		'" . pg_escape_string($md5) . "',
-		'" . pg_escape_string($sha1) . "',
-		'" . pg_escape_string($payload) . "'
-	)
-	returning
-		id
+		email,
+		md5
 ");
 if (pg_num_rows($resultset) == 1) {
 	$result = pg_fetch_object($resultset, 0);
-	if ($result->id > 0) {
-		print("<p>The following deposit has been received.</p><br>");
+	if (isset($result->email)) {
+		print("<p>The following escrow deposit has been received.  You may <a href='/retrieve'>securely retrieve</a> it at any time.</p><br>");
 ?>
 <table>
-<tr> <td><b>Email</b></td> <td><?php echo $_SESSION["email"]?></td> </tr>
-<?php if ($filesize > 0) { ?>
-<tr> <td><b>File name</b></td> <td><?php echo $filename ?></td> </tr>
-<tr> <td><b>File size</b></td> <td><?php echo "$filesize bytes" ?></td> </tr>
-<tr> <td><b>md5</b></td> <td><?php echo $md5 ?></td> </tr>
-<?php } ?>
-<tr> <td><b>Text</b></td> <td><?php echo "$note" ?></td> </tr>
+<tr> <td><b>Email</b></td> <td><?php echo $result->email ?></td> </tr>
+<tr> <td><b>File name</b></td> <td><?php echo $result->filename ?></td> </tr>
+<tr> <td><b>File size</b></td> <td><?php echo $result->filesize . " bytes" ?></td> </tr>
+<tr> <td><b>md5</b></td> <td><?php echo $result->md5 ?></td> </tr>
 </table>
 <br>
 <?php
-		print("<p>It is your responsibility to ensure that the deposit we have matches your intended upload.</p>");
-		print("<p>You may <a href='/retrieve'>securely retrieve</a> it at any time.</p>");
+		print("<p>Please be aware that your usage of this site is bound by the <a href=/terms.html>Terms of Service</a> and <a href=/privacy.html>Privacy Statement</a>.</p>");
 	} else {
-		error("An error has occurred");
+		error("An error has occurred (bad update)");
 	}
 } else {
-	error("An error has occurred");
+	error("An error has occurred (empty file)");
 }
 include("../../include/below.html");
 ?>
