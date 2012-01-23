@@ -48,14 +48,13 @@ if (pg_num_rows($resultset) != 1) {
 	exit(0);
 }
 $result = pg_fetch_object($resultset, 0);
-file_put_contents("/tmp/foo", $result->payload);
 $fingerprint = preg_replace("/\s+/", "", file_get_contents("../../gpg.fingerprint"));
 $res = gnupg_init();
 if (! gnupg_adddecryptkey($res, $fingerprint, "")) {
-	error("3: " . gnupg_geterror($res));
+	error("Server side key error");
 }
 if (! $payload = gnupg_decrypt($res, $result->payload)) {
-	error("5: " . gnupg_geterror($res));
+	error("Server side decryption error");
 }
 $filesize = strlen($payload);
 $filename = $result->filename;

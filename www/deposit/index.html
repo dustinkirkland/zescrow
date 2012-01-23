@@ -30,12 +30,24 @@ if (strlen($payload) > 4096) {
 	header("HTTP/1.0 413 Request Entity Too Large");
 	exit;
 }
-if (! ! preg_match('/[^\x00-\x7F]/S', $payload) ) {
+if (preg_match('/[^\x00-\x7F]/S', $payload) ) {
 	header("HTTP/1.0 400 Bad Request");
 	exit;
 }
-$md5 = md5($_POST["payload"]);
-$sha1 = sha1($_POST["payload"]);
+$fingerprint = preg_replace("/\s+/", "", file_get_contents("../gpg.fingerprint"));
+$res = gnupg_init();
+if (! gnupg_adddecryptkey($res, $fingerprint, "")) {
+	header("HTTP/1.0 400 Bad Request");
+	print("Server side key error");
+	exit;
+}
+if (! $cleartext = gnupg_decrypt($res, $_POST["payload"])) {
+	header("HTTP/1.0 400 Bad Request");
+	print("Server side decryption error");
+	exit;
+}
+$md5 = md5($cleartext);
+$sha1 = sha1($cleartext);
 $filename = "ecryptfs.tar.gz";
 $auth = rand() . rand();
 
