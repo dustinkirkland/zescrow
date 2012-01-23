@@ -33,7 +33,7 @@
     margin-right:	0px;
   }
   LI                       {line-height: 120%;}
-  A                        {text-decoration: none; color: #138013;}
+  A                        {text-decoration: none; color: #138013; font-weight: 700;}
   A:hover                  {text-decoration: underline; }
   A.logo		   {text-decoration: none; color: #0d580d}
   P, DIV                   {border: 0px; margin: 0px; padding: 0px;}
