@@ -45,7 +45,8 @@ $resultset = pg_query($CONN, "
 	update
 		payload
 	set
-		email='" . pg_escape_string($_SESSION["email"]) . "'
+		email='" . pg_escape_string($_SESSION["email"]) . "',
+		registration=now()
 	where
 		email is null
 		  and
