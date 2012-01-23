@@ -30,6 +30,7 @@ if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	$_SESSION["return"] = "/retrieve";
 	redirect("/openid/");
 }
+$_SESSION["email"] = urldecode($_SESSION["email"]);
 
 $resultset = pg_query($CONN, "
 	select

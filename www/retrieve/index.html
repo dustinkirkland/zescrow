@@ -29,6 +29,7 @@ if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	$_SESSION["return"] = "/retrieve";
 	redirect("/openid/");
 }
+$_SESSION["email"] = urldecode($_SESSION["email"]);
 include("../include/above.html");
 ?>
 
@@ -50,9 +51,9 @@ $resultset = pg_query($CONN, "
 ");
 if (pg_num_rows($resultset) > 0) {
 ?>
-<p><b>You have the following deposits available for download</b></p><br>
+<p><b>You have the following deposits available for download:</b></p><br>
 <form method="post" action="go/">
-<table cellspacing=4 cellpadding=4>
+<table cellspacing=4 cellpadding=4 bgcolor=#EEEEEE>
   <tr>
     <th>Date of Deposit</th>
     <th>File name</th>
