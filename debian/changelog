@@ -1,5 +1,5 @@
-keyescrow (1.0) unreleased; urgency=low
+keyescrow (1.0-0ubuntu1) precise; urgency=low
 
   * initial packaging
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 01 Feb 2012 17:58:24 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 12 Feb 2012 08:35:33 -0600
