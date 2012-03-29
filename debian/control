@@ -15,6 +15,10 @@ Depends: ${misc:Depends},
  sensible-utils,
 Enhances:
  ecryptfs-utils
+Replaces:
+ keyescrow-client
+Conflicts:
+ keyescrow-client
 Description: back up eCryptfs Encrypted Home or Encrypted Private Configuration
  zescrow-client provides the zescrow (formerly ecryptfs-escrow-private) utility,
  which can be used to upload a backup of an eCryptfs

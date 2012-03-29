@@ -12,6 +12,8 @@ zescrow (1.1) unreleased; urgency=low
     www/privacy.html, www/retrieve/go/index.html,
     www/retrieve/index.html, www/terms.html:
     - comprehensive branding rename from KeyEscrow to zEscrow
+  * debian/control:
+    - handle package rename and replacement
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 12 Feb 2012 08:35:40 -0600
 
