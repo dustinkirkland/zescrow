@@ -1,5 +1,5 @@
 #!/bin/sh -e
-#    ecryptfs-escrow-private
+#    zescrow / ecryptfs-escrow-private
 #    Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 #    Copyright (C) 2012 Scot-Irish Lads, LLC
 #
@@ -48,7 +48,7 @@ echo "
 # and create an archive of your ~/.ecryptfs/ configuration and your
 # MOUNT passphrase.  It will be encrypted with a public key unique to
 # your chosen open source key escrow server compatible with
-# KeyEscrow.net.
+# zEscrow.
 #
 # After a successful upload, you MUST click on the generated URL and
 # login using a Google OpenID account, and associate your account
@@ -57,13 +57,13 @@ echo "
 #####################################################################
 "
 
-# Get the KeyEscrow.net server
-default_server="https://keyescrow.net"
+# Get the zEscrow server
+default_server="https://zEscrow.gazzang.com"
 printf "Key escrow server [$default_server]: "
 server=$(head -n1)
 [ -n "$server" ] || server="$default_server"
 
-# Get the KeyEscrow server GPG fingerprint
+# Get the zEscrow server GPG fingerprint
 fingerprint=$(curl -s -o- $server/gpg.fingerprint) || error "Invalid key escrow server [$server]"
 gpg_opts="-q --yes --no-default-keyring --keyring ecryptfs --homedir $gpg_dir"
 (curl -s -o- $server/gpg.pub | gpg $gpg_opts --import) || error "Invalid key escrow server"

@@ -1,6 +1,17 @@
-keyescrow (1.1) unreleased; urgency=low
+zescrow (1.1) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/control, debian/copyright, etc/apache_config.CHANGE_ME,
+    INSTALL, upload/go/index.html, upload/index.html, usr/bin/ecryptfs-
+    escrow-private => usr/bin/zescrow, usr/share/man/man1/ecryptfs-
+    escrow-private.1 => usr/share/man/man1/zescrow.1,
+    www/deposit/go/index.html, www/deposit/index.html,
+    www/include/above.html, www/include/below.html,
+    www/include/credentials.html.CHANGE_ME, www/include/escrow.css,
+    www/include/functions.html, www/index.html, www/not-
+    found/index.html, www/openid/index.html, www/openid/return.html,
+    www/privacy.html, www/retrieve/go/index.html,
+    www/retrieve/index.html, www/terms.html:
+    - comprehensive branding rename from KeyEscrow to zEscrow
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 12 Feb 2012 08:35:40 -0600
 

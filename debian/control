@@ -1,12 +1,12 @@
-Source: keyescrow
+Source: zescrow
 Section: misc
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
 Build-Depends: debhelper (>= 7.0.50~)
 Standards-Version: 3.9.2
-Homepage: http://launchpad.net/keyescrow
+Homepage: http://launchpad.net/zEscrow
 
-Package: keyescrow-client
+Package: zescrow-client
 Architecture: all
 Depends: ${misc:Depends},
  curl,
@@ -16,22 +16,22 @@ Depends: ${misc:Depends},
 Enhances:
  ecryptfs-utils
 Description: back up eCryptfs Encrypted Home or Encrypted Private Configuration
- keyescrow-client provides the ecryptfs-escrow-private utility,
+ zescrow-client provides the zescrow (formerly ecryptfs-escrow-private) utility,
  which can be used to upload a backup of an eCryptfs
  Encrypted Home or eCryptfs Encrypted Private configuration
- to a keyescrow-compatible server.
+ to a zEscrow compatible server.
  .
- KeyEscrow.net is one such compatible server, an implementation
- of the AGPL free software available at https://launchpad.net/keyescrow.
+ zEscrow.gazzang.com is one such compatible server, an implementation
+ of the AGPL free software available at https://launchpad.net/zEscrow.
  .
- ecryptfs-escrow-private will:
-  - prompt for your chosen keyescrow server
-  - retrieve the public GPG key of that keyescrow server
+ zescrow will:
+  - prompt for your chosen zEscrow server
+  - retrieve the public GPG key of that zEscrow server
   - prompt for your login passphrase
   - use your login passphrase to decrypt your mount passphrase
   - create a tar archive of your ~/.ecryptfs directory and decrypted
     mount passphrase
-  - gpg encrypt that archive the your keyescrow server's public key
-  - upload your encrypted archive to your keyescrow server
+  - gpg encrypt that archive the your zEscrow server's public key
+  - upload your encrypted archive to your zEscrow server
   - display a URL and offer to launch a browser, where you must go
     to associate a Google account and email address with your backup

@@ -1,6 +1,6 @@
 Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
-Name: keyescrow
-Source: https://code.launchpad.net/keyescrow
+Name: zescrow
+Source: https://code.launchpad.net/zescrow
 
 Files: *
 Copyright: Copyright (C) 2008-2012 Dustin Kirkland <dustin.kirkland@gmail.com>

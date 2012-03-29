@@ -7,22 +7,22 @@ sudo pecl install gnupg
 
 # Branch code
 cd /srv
-sudo bzr branch lp:keyescrow
+sudo bzr branch lp:zescrow zEscrow
 sudo mv /var/www/ /var/www.orig
 
 # Configure apache, enable site
 sudo a2dissite default
-sudo cp /srv/keyescrow/etc/apache_config.CHANGE_ME /etc/apache2/sites-available/keyescrow
-sudo a2ensite keyescrow
+sudo cp /srv/zEscrow/etc/apache_config.CHANGE_ME /etc/apache2/sites-available/zEscrow
+sudo a2ensite zEscrow
 sudo a2enmod ssl
 sudo a2enmod rewrite
 sudo service apache2 restart
 
 # Create database
 pw=$(pwgen -s 30 | head -n1)
-sudo su - postgres -c "createdb keyescrow && psql -f /srv/keyescrow/db/schema.sql keyescrow"
-sudo su - postgres -c "psql -c \"alter user postgres with password '$pw'\" keyescrow"
-sudo cp /srv/keyescrow/www/include/credentials.html.CHANGE_ME /srv/keyescrow/www/include/credentials.html
-sudo chmod 640 /srv/keyescrow/www/include/credentials.html
-sudo chown root:www-data /srv/keyescrow/www/include/credentials.html
-sudo sed -i "s/___password___/$pw/g" /srv/keyescrow/www/include/credentials.html
+sudo su - postgres -c "createdb zEscrow && psql -f /srv/zEscrow/db/schema.sql zEscrow"
+sudo su - postgres -c "psql -c \"alter user postgres with password '$pw'\" zEscrow"
+sudo cp /srv/zEscrow/www/include/credentials.html.CHANGE_ME /srv/zEscrow/www/include/credentials.html
+sudo chmod 640 /srv/zEscrow/www/include/credentials.html
+sudo chown root:www-data /srv/zEscrow/www/include/credentials.html
+sudo sed -i "s/___password___/$pw/g" /srv/zEscrow/www/include/credentials.html
