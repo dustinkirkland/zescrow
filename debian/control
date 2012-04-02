@@ -28,7 +28,7 @@ Description: back up eCryptfs Encrypted Home or Encrypted Private Configuration
  zEscrow.gazzang.com is one such compatible server, an implementation
  of the AGPL free software available at https://launchpad.net/zEscrow.
  .
- zescrow will:
+ zEscrow will:
   - prompt for your chosen zEscrow server
   - retrieve the public GPG key of that zEscrow server
   - prompt for your login passphrase

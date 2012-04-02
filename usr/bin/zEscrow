@@ -1,5 +1,5 @@
 #!/bin/sh -e
-#    zescrow / ecryptfs-escrow-private
+#    zEscrow - aka ecryptfs-escrow-private
 #    Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 #    Copyright (C) 2012 Scot-Irish Lads, LLC
 #
@@ -23,14 +23,16 @@ error() {
 	exit 1
 }
 
-# Create our temp workspace
-tempfile=$(mktemp /dev/shm/ecryptfs-XXXXXXXXXXXX)
+PKG="zEscrow"
+
+# Create our temp workspace in memory
+tempfile=$(mktemp /dev/shm/$PKG-XXXXXXXXXXXX)
 chmod 600 "$tempfile"
-tempdir=$(mktemp -d /dev/shm/ecryptfs-XXXXXXXXXXXX)
+tempdir=$(mktemp -d /dev/shm/$PKG-XXXXXXXXXXXX)
 chmod 700 "$tempdir"
 mv "$tempfile" "$tempfile.tar.gz.gpg"
 tempfile="$tempfile.tar.gz.gpg"
-gpg_dir=$(mktemp -d /dev/shm/ecryptfs-XXXXXXXXXXXX)
+gpg_dir=$(mktemp -d /dev/shm/$PKG-XXXXXXXXXXXX)
 trap "rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null || true" EXIT HUP INT QUIT TERM
 
 echo "
@@ -58,16 +60,17 @@ echo "
 "
 
 # Get the zEscrow server
-default_server="https://zEscrow.gazzang.com"
+# NOTE: Use lower case "e" here, messes with SSL cert
+default_server="https://zescrow.gazzang.com"
 printf "Key escrow server [$default_server]: "
 server=$(head -n1)
 [ -n "$server" ] || server="$default_server"
 
-# Get the zEscrow server GPG fingerprint
+# Get the zEscrow server GPG fingerprint and import into temporary keyring
 fingerprint=$(curl -s -o- $server/gpg.fingerprint) || error "Invalid key escrow server [$server]"
 gpg_opts="-q --yes --no-default-keyring --keyring ecryptfs --homedir $gpg_dir"
 (curl -s -o- $server/gpg.pub | gpg $gpg_opts --import) || error "Invalid key escrow server"
-(printf "$fingerprint:6:\n" | gpg $gpg_opts --import-ownertrust 2>/tmp/out) || error "Invalid server fingerprint"
+(printf "%s:6:\n" ${fingerprint##*/} | gpg $gpg_opts --import-ownertrust 2>/tmp/out) || error "Invalid server fingerprint"
 
 # Copy .ecryptfs data to our temp dir
 # Except for the wrapped-passphrase file

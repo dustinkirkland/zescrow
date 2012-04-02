@@ -17,6 +17,13 @@ zescrow (1.1) unreleased; urgency=low
   * etc/apache_config.CHANGE_ME, INSTALL,
     www/include/credentials.html.CHANGE_ME:
     - improve installation instructions
+  * INSTALL:
+    - add dependent packages, more instructions
+  * usr/bin/zescrow:
+    - use a PKG variable, put more in the zEscrow namespace
+  * debian/control, INSTALL, usr/bin/zescrow => usr/bin/zEscrow,
+    usr/share/man/man1/zescrow.1 => usr/share/man/man1/zEscrow.1:
+    - fix a few more uses of s/zescrow/zEscrow/g
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 12 Feb 2012 08:35:40 -0600
 
