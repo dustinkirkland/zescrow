@@ -45,7 +45,7 @@
         SSLEngine On
         SSLCertificateFile /etc/apache2/ssl/zescrow.gazzang.com.crt
         SSLCertificateKeyFile /etc/apache2/ssl/zescrow.gazzang.com.key
-        SSLCertificateChainFile /etc/apache2/ssl/gd_bundle.crt
+        SSLCertificateChainFile /etc/apache2/ssl/zescrow.gazzang.com.chain.crt
         DocumentRoot /var/www/
         AddType application/x-httpd-php .php .html
         AddType application/xrds+xml .xrdf

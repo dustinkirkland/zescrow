@@ -1,7 +1,7 @@
 # Install Ubuntu
 
 # Install addtional packages
-sudo apt-get install byobu bzr apache2 libapache2-mod-php5 postgresql php5-pgsql etckeeper ccze dkim-filter famfamfam-silk php-pear php5-dev libcurl3-openssl-dev libgpgme11 libgpgme11-dev
+sudo apt-get install byobu bzr apache2 libapache2-mod-php5 postgresql php5-pgsql etckeeper ccze opendkim famfamfam-silk php-pear php5-dev libcurl3-openssl-dev libgpgme11 libgpgme11-dev build-essential pwgen haveged
 sudo pecl install gnupg
 # You should add "extension=gnupg.so" to /etc/php5/apache2/php.ini
 
@@ -9,13 +9,16 @@ sudo pecl install gnupg
 cd /srv
 sudo bzr branch lp:zescrow zEscrow
 sudo mv /var/www/ /var/www.orig
+sudo ln -s /srv/zEscrow/www /var
 
 # Configure apache, enable site
 sudo a2dissite default
 sudo cp /srv/zEscrow/etc/apache_config.CHANGE_ME /etc/apache2/sites-available/zEscrow
+# sudo vi /etc/apache2/sites-available/zEscrow
 sudo a2ensite zEscrow
 sudo a2enmod ssl
 sudo a2enmod rewrite
+sudo a2dismod status
 sudo service apache2 restart
 
 # Create database
@@ -26,3 +29,9 @@ sudo cp /srv/zEscrow/www/include/credentials.html.CHANGE_ME /srv/zEscrow/www/inc
 sudo chmod 640 /srv/zEscrow/www/include/credentials.html
 sudo chown root:www-data /srv/zEscrow/www/include/credentials.html
 sudo sed -i "s/___password___/$pw/g" /srv/zEscrow/www/include/credentials.html
+# sudo vi /srv/zEscrow/www/include/credentials.html
+
+# Generate keys
+sudo mkdir -p -m 700 /var/lib/zEscrow/.gnupg
+sudo chown www-data:www-data /var/lib/zEscrow/.gnupg
+sudo su -l www-data -c gpg --homedir /var/lib/zEscrow/.gnupg --gen-key
