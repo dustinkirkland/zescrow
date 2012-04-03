@@ -1,4 +1,4 @@
-zescrow (1.1) unreleased; urgency=low
+zescrow (1.1-0ubuntu1) precise; urgency=low
 
   * debian/control, debian/copyright, etc/apache_config.CHANGE_ME,
     INSTALL, upload/go/index.html, upload/index.html, usr/bin/ecryptfs-
@@ -28,7 +28,7 @@ zescrow (1.1) unreleased; urgency=low
   * www/include/credentials.html.CHANGE_ME, www/include/functions.html:
     - move the defaul url
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Sun, 12 Feb 2012 08:35:40 -0600
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 03 Apr 2012 16:43:37 -0500
 
 keyescrow (1.0-0ubuntu1) precise; urgency=low
 
