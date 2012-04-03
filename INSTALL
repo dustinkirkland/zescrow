@@ -34,6 +34,6 @@ sudo sed -i "s/___password___/$pw/g" /srv/zEscrow/www/include/credentials.html
 # Generate keys
 sudo mkdir -p -m 700 /var/lib/zEscrow/.gnupg
 sudo chown www-data:www-data /var/lib/zEscrow/.gnupg
-sudo su -l www-data -c gpg --homedir /var/lib/zEscrow/.gnupg --gen-key
+sudo su -l www-data -c "gpg --homedir /var/lib/zEscrow/.gnupg --gen-key"
 # Write the fingerprint to /var/www/gpg.fingerprint
 # Write the public key to /var/www/gpg.pub

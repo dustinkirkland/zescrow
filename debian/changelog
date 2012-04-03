@@ -19,6 +19,7 @@ zescrow (1.1) unreleased; urgency=low
     - improve installation instructions
   * INSTALL:
     - add dependent packages, more instructions
+    - quote a sudo'd command
   * usr/bin/zescrow:
     - use a PKG variable, put more in the zEscrow namespace
   * debian/control, INSTALL, usr/bin/zescrow => usr/bin/zEscrow,
