@@ -1,6 +1,7 @@
 zescrow (1.2) unreleased; urgency=low
 
-  * UNRELEASED
+  * usr/bin/zEscrow:
+    - remove debugging /tmp/out
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Tue, 03 Apr 2012 16:43:39 -0500
 

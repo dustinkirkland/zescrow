@@ -70,7 +70,7 @@ server=$(head -n1)
 fingerprint=$(curl -s -o- $server/gpg.fingerprint) || error "Invalid key escrow server [$server]"
 gpg_opts="-q --yes --no-default-keyring --keyring ecryptfs --homedir $gpg_dir"
 (curl -s -o- $server/gpg.pub | gpg $gpg_opts --import) || error "Invalid key escrow server"
-(printf "%s:6:\n" ${fingerprint##*/} | gpg $gpg_opts --import-ownertrust 2>/tmp/out) || error "Invalid server fingerprint"
+(printf "%s:6:\n" ${fingerprint##*/} | gpg $gpg_opts --import-ownertrust 2>/dev/null) || error "Invalid server fingerprint"
 
 # Copy .ecryptfs data to our temp dir
 # Except for the wrapped-passphrase file
