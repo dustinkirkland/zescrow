@@ -5,6 +5,7 @@ sudo apt-get install byobu bzr apache2 libapache2-mod-php5 postgresql php5-pgsql
 sudo pecl install gnupg
 # You should add "extension=gnupg.so" to /etc/php5/apache2/php.ini
 # You should limit "upload_max_filesize = 5K" in /etc/php5/apache2/php.ini
+# You should limit "max_file_uploads = 1" in /etc/php5/apache2/php.ini
 
 # Branch code
 cd /srv

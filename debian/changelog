@@ -2,6 +2,7 @@ zescrow (1.4) unreleased; urgency=low
 
   * INSTALL:
     - limit uploads to 5K
+    - limit to one file uploaded at a time
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Apr 2012 12:12:22 -0500
 
