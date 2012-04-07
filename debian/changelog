@@ -4,6 +4,8 @@ zescrow (1.4) unreleased; urgency=low
     - limit uploads to 5K
     - limit to one file uploaded at a time
     - disable url open and includes
+  * www/robots.txt:
+    - disable all scanning
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Apr 2012 12:12:22 -0500
 
