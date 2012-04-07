@@ -1,6 +1,14 @@
 zescrow (1.3) unreleased; urgency=low
 
-  * UNRELEASED
+  * debian/copyright, upload/go/index.html, upload/index.html,
+    usr/bin/zEscrow, www/deposit/go/index.html, www/deposit/index.html,
+    www/include/above.html, www/include/below.html,
+    www/include/credentials.html.CHANGE_ME, www/include/escrow.css,
+    www/include/functions.html, www/index.html, www/not-
+    found/index.html, www/openid/index.html, www/openid/return.html,
+    www/privacy.html, www/retrieve/go/index.html,
+    www/retrieve/index.html, www/terms.html:
+    - Copyright updated to include Gazzang, Inc.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Apr 2012 12:02:31 -0500
 
