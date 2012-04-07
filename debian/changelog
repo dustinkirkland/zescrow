@@ -1,4 +1,4 @@
-zescrow (1.3) unreleased; urgency=low
+zescrow (1.3-0ubuntu1) precise; urgency=low
 
   * debian/copyright, upload/go/index.html, upload/index.html,
     usr/bin/zEscrow, www/deposit/go/index.html, www/deposit/index.html,
@@ -29,7 +29,7 @@ zescrow (1.3) unreleased; urgency=low
     - make the $url more readable
     - handle the browser launching prompt correctly
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Apr 2012 12:02:31 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Apr 2012 12:11:29 -0500
 
 zescrow (1.2-0ubuntu1) precise; urgency=low
 
