@@ -1,6 +1,7 @@
 zescrow (1.4) unreleased; urgency=low
 
-  * UNRELEASED
+  * INSTALL:
+    - limit uploads to 5K
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Apr 2012 12:12:22 -0500
 
