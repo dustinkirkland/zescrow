@@ -9,6 +9,25 @@ zescrow (1.3) unreleased; urgency=low
     www/privacy.html, www/retrieve/go/index.html,
     www/retrieve/index.html, www/terms.html:
     - Copyright updated to include Gazzang, Inc.
+  * usr/bin/zEscrow:
+    - Multiple security fixes, according to line-by-line code audit by
+      Kees Cook <kees@ubuntu.com>
+    - use 'set -e' rather than sh -e, to ensure errors are caught if an
+      interpreter other than sh is used
+    - store the stty earlier and restore on trapped exits
+    - generate the tempfile with the required extensions
+    - drop redundant chmodding
+    - note specifically that the user's passphrase is NOT sent to the server
+    - remove one of the client/server roundtrips, fetching the key
+      fingerprint
+    - instead, use gpg's --status-fd to parse machine readable output and
+      retrieve the fingerprint from there
+    - catch curl errors
+    - catch gpg import errors
+    - validate the fingerprint
+    - drop use of wildcard in copying to tempdir
+    - make the $url more readable
+    - handle the browser launching prompt correctly
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 04 Apr 2012 12:02:31 -0500
 

@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 #    zEscrow - aka ecryptfs-escrow-private
 #    Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
 #    Copyright (C) 2012 Scot-Irish Lads, LLC
@@ -18,6 +18,9 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Bail immediately on errors!
+set -e
+
 error() {
 	printf "ERROR: %s\n" "$@" 1>&2
 	printf "ERROR: Beware, this escrow did NOT succeed!\n\n"
@@ -26,15 +29,19 @@ error() {
 
 PKG="zEscrow"
 
+# Store the stty, which we modify later
+stty_orig=$(stty -g)
+
+# Bail out early, if this isn't an ecryptfs setup
+if [ ! -f "$HOME/.ecryptfs/wrapped-passphrase" ] || [ ! -f "$HOME/.ecryptfs/Private.sig" ]; then
+	error "Unable to find eCryptfs configuration at [$HOME/.ecryptfs/]"
+fi
+
 # Create our temp workspace in memory
-tempfile=$(mktemp /dev/shm/$PKG-XXXXXXXXXXXX)
-chmod 600 "$tempfile"
+tempfile=$(mktemp --tmpdir=/dev/shm $PKG-XXXXXXXXXXXX.tar.gz.gpg)
 tempdir=$(mktemp -d /dev/shm/$PKG-XXXXXXXXXXXX)
-chmod 700 "$tempdir"
-mv "$tempfile" "$tempfile.tar.gz.gpg"
-tempfile="$tempfile.tar.gz.gpg"
 gpg_dir=$(mktemp -d /dev/shm/$PKG-XXXXXXXXXXXX)
-trap "rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null || true" EXIT HUP INT QUIT TERM
+trap "(stty $stty_orig; rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null) || true" EXIT HUP INT QUIT TERM
 
 echo "
 #####################################################################
@@ -45,7 +52,7 @@ echo "
 #
 # You will be prompted for:
 #  - a key escrow server
-#  - your LOGIN passphrase
+#  - your LOGIN passphrase (which is NOT sent to the server!)
 #
 # Your LOGIN passphrase will be used to decrypt your MOUNT passphrase
 # and create an archive of your ~/.ecryptfs/ configuration and your
@@ -67,18 +74,26 @@ printf "Key escrow server [$default_server]: "
 server=$(head -n1)
 [ -n "$server" ] || server="$default_server"
 
-# Get the zEscrow server GPG fingerprint and import into temporary keyring
-fingerprint=$(curl -s -o- $server/gpg.fingerprint) || error "Invalid key escrow server [$server]"
-gpg_opts="-q --yes --no-default-keyring --keyring ecryptfs --homedir $gpg_dir"
-(curl -s -o- $server/gpg.pub | gpg $gpg_opts --import) || error "Invalid key escrow server"
-(printf "%s:6:\n" ${fingerprint##*/} | gpg $gpg_opts --import-ownertrust 2>/dev/null) || error "Invalid server fingerprint"
+# Ensure SSL
+if ! (echo "$server" | grep -qs "^https://"); then
+	error "For your security, this server URL must use an https server [$server]"
+fi
+
+# Get the zEscrow server public GPG key and import into temporary keyring
+gpg_opts="-q --yes --no-default-keyring --keyring ecryptfs --homedir $gpg_dir --status-fd 1"
+pubkey=$(curl -s -o- $server/gpg.pub) || error "Invalid key escrow server"
+status=$(printf "%s" "$pubkey" | gpg $gpg_opts --import) || error "Unable to import server public key"
+(printf "%s" "$status" | grep "^\[GNUPG:\] IMPORT_OK") || error "Server public key import failed"
+fingerprint=$(printf "%s" "$status" | grep -m1 "^\[GNUPG:\] IMPORT_OK" | awk '{print $4}')
+(printf "%s" "$fingerprint" | grep "^[0-9A-F]\{40,40\}$") || error "Invalid server fingerprint"
+(printf "%s:6:\n" ${fingerprint} | gpg $gpg_opts --import-ownertrust 2>/dev/null) || error "Invalid server fingerprint"
 
 # Copy .ecryptfs data to our temp dir
 # Except for the wrapped-passphrase file
 # Don't store the user's login passphrase
 # But only their random mount passphrase
 mkdir -m 700 -p "$tempdir/ecryptfs"
-cp -af "$HOME/.ecryptfs/"* "$tempdir/ecryptfs"
+cp -af "$HOME"/.ecryptfs/. "$tempdir"/ecryptfs/
 rm -f "$tempdir/ecryptfs/wrapped-passphrase"
 touch "$tempdir/ecryptfs/unwrapped-passphrase"
 chmod 600 "$tempdir/ecryptfs/unwrapped-passphrase"
@@ -92,7 +107,6 @@ echo "
 # passphrase.
 #####################################################################
 "
-stty_orig=$(stty -g)
 stty -echo
 printf "Your LOGIN passphrase: "
 passphrase=$(head -n1)
@@ -123,18 +137,21 @@ echo "
 #####################################################################
 # To complete this escrow, you MUST go to this url, login,
 # and associate an email address with your upload IMMEDIATELY!
-#  * $url
+#
+# $url
+#
 #####################################################################
 "
-
 # Launch browser?
-printf "Go to [%s] now [Y/n]: " "$url"
-answer=$(head -n1)
-case "$answer" in
-	n*|N*)
-		exit 0
-	;;
-	*)
-		exec sensible-browser $url
-	;;
-esac
+while true; do
+	printf "Go to [%s] now [Y/n]: " "$url"
+	answer=$(head -n1)
+	case "$answer" in
+		n*|N*)
+			exit 0
+		;;
+		Y*|y*)
+			exec sensible-browser $url
+		;;
+	esac
+done
