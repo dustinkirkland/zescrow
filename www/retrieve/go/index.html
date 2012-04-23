@@ -50,7 +50,7 @@ if (pg_num_rows($resultset) != 1) {
 $result = pg_fetch_object($resultset, 0);
 $res = gnupg_init();
 $gpg = gnupg_keyinfo($res, $CONTACT);
-$fingerprint = $gpg[0]["subkeys"][0]["fingerprint"]);
+$fingerprint = $gpg[0]["subkeys"][0]["fingerprint"];
 if (! gnupg_adddecryptkey($res, $fingerprint, "")) {
 	error("Server side key error");
 }
