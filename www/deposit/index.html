@@ -66,5 +66,7 @@ if (pg_num_rows($resultset) == 1) {
 	if ($result->id > 0) {
 		print($URL . "?u=$md5-$auth");
 	}
+} else {
+	error("Server failed to register deposit");
 }
 ?>
