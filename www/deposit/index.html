@@ -27,7 +27,7 @@ include_once("../include/functions.html");
 
 $payload = $_POST["payload"];
 $filesize = strlen($payload);
-if (strlen($payload) > 4096) {
+if ($filesize > 4096) {
 	header("HTTP/1.0 413 Request Entity Too Large");
 	exit;
 }
