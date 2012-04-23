@@ -62,4 +62,13 @@ function redirect($url) {
         exit;
 }
 
+function assert_email($email) {
+	if (strlen($email) < 3) {
+		error("Invalid email address; too short");
+	}
+	if (! preg_match("/.*@.*/", $email)) {
+		error("Invalid email address; bad format");
+	}
+}
+
 ?>

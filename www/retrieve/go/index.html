@@ -31,7 +31,8 @@ if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 	$_SESSION["return"] = "/retrieve";
 	redirect("/openid/");
 }
-$_SESSION["email"] = urldecode($_SESSION["email"]);
+$EMAIL = strtolower(urldecode($_SESSION["email"]));
+assert_email($EMAIL);
 
 $resultset = pg_query($CONN, "
 	select
@@ -42,7 +43,7 @@ $resultset = pg_query($CONN, "
 	where
 		payload.id='" . pg_escape_string($_SESSION["id"]) . "'
 		and
-		payload.email='" . pg_escape_string(strtolower($_SESSION["email"])) . "'
+		payload.email='" . pg_escape_string($EMAIL) . "'
 ");
 if (pg_num_rows($resultset) != 1) {
 	print("Error");

@@ -37,7 +37,8 @@ if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 if (isset($_REQUEST["u"]) && !isset($_SESSION["u"])) {
 	$_SESSION["u"] = urldecode($_REQUEST["u"]);
 }
-$_SESSION["email"] = strtolower(urldecode($_SESSION["email"]));
+$EMAIL = strtolower(urldecode($_SESSION["email"]));
+assert_email($EMAIL);
 list($md5, $auth) = preg_split("/-/", $_SESSION["u"], 2);
 
 include("../../include/above.html");
@@ -46,7 +47,7 @@ $resultset = pg_query($CONN, "
 	update
 		payload
 	set
-		email='" . pg_escape_string($_SESSION["email"]) . "',
+		email='" . pg_escape_string($EMAIL) . "',
 		registration=now()
 	where
 		email is null
