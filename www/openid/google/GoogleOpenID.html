@@ -280,6 +280,8 @@
       //set a few options
       curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($c, CURLOPT_HEADER, false);
+      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
+      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
 
       //get the contents of request URL
       $request_contents = curl_exec($c);
@@ -319,6 +321,8 @@
       //set a few options
       curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
       curl_setopt($c, CURLOPT_HEADER, false);
+      curl_setopt($c, CURLOPT_SSL_VERIFYPEER, true);
+      curl_setopt($c, CURLOPT_SSL_VERIFYHOST, 2);
 
       //fetch the contents of the request URL
       $request_contents = curl_exec($c);
