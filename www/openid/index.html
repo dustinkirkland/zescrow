@@ -25,6 +25,6 @@
 
 
   require_once("google/GoogleOpenID.html");
-  $googleLogin = GoogleOpenID::createRequest("https://".$_SERVER['SERVER_NAME']."/openid/return.html", $association_handle, true);
+  $googleLogin = GoogleOpenID::createRequest("/openid/return.html", $association_handle, true);
   $googleLogin->redirect();
 ?>
