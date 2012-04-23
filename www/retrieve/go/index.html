@@ -58,17 +58,12 @@ if (! $payload = gnupg_decrypt($res, $result->payload)) {
 }
 $filesize = strlen($payload);
 $filename = $result->filename;
-$resultset = pg_query($CONN, "
-	insert into
-		download
-	(
-		payload_id
-	)
+$resultset = pg_query_params($CONN, "
+	insert into download
+		(payload_id)
 	values
-	(
-		'" . pg_escape_string($_SESSION["id"]) . "'
-	)
-");
+		('$1')
+", array($_SESSION["id"]));
 header("Content-type: application/download");
 header("Content-length: $filesize");
 header("Content-transfer-encodig: binary");
