@@ -71,8 +71,8 @@ if (pg_num_rows($resultset) == 1) {
 		print("<p>The following escrow deposit has been received.  You may <a href='/retrieve'>securely retrieve</a> it at any time.</p><br>");
 ?>
 <table>
-<tr> <td><b>Email</b></td> <td><?php echo $result->email ?></td> </tr>
-<tr> <td><b>File name</b></td> <td><?php echo $result->filename ?></td> </tr>
+<tr> <td><b>Email</b></td> <td><?php echo htmlspecialchars($result->email) ?></td> </tr>
+<tr> <td><b>File name</b></td> <td><?php echo htmlspecialchars($result->filename) ?></td> </tr>
 <tr> <td><b>File size</b></td> <td><?php echo $result->filesize . " bytes" ?></td> </tr>
 <tr> <td><b>md5</b></td> <td><?php echo $result->md5 ?></td> </tr>
 </table>
