@@ -27,7 +27,7 @@ include_once("../include/functions.html");
 
 $payload = urldecode($_POST["payload"]);
 $filesize = strlen($payload);
-if (strlen($payload) > 4096) {
+if ($filesize > 4096) {
 	http_response_code(413);
 	exit;
 }
