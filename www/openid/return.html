@@ -33,5 +33,7 @@ if($googleLogin->success()){
 	if (isset($_SESSION["return"])) {
 		redirect($_SESSION["return"]);
 	}
+} else {
+	error("Google OpenID login failed");
 }
 ?>
