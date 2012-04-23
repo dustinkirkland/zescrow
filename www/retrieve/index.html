@@ -70,7 +70,7 @@ if (pg_num_rows($resultset) > 0) {
 			print("
   <tr>
     <td>" . preg_replace("/\..*$/", "", $result->uploaded) . "</td>
-    <td>" . $result->filename . "</td>
+    <td>" . htmlspecialchars($result->filename) . "</td>
 			");
 			if ($result->filesize > 0) {
 				print("<td>" . $result->filesize . " bytes</td>");
