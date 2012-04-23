@@ -47,14 +47,14 @@ $resultset = pg_query_params($CONN, "
 	update
 		payload
 	set
-		email='$1',
+		email=$1,
 		registration=now()
 	where
 		email is null
 		  and
-		auth='$2'
+		auth=$2
 		  and
-		md5='$3'
+		md5=$3
 		  and
 		creation<=now()
 		  and

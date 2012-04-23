@@ -47,7 +47,7 @@ $resultset = pg_query_params($CONN, "
 	from
 		payload
 	where
-		payload.email='$1'
+		payload.email=$1
 	order by
 		payload.creation desc
 ", array($EMAIL));
