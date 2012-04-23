@@ -35,8 +35,9 @@ if (preg_match('/[^\x00-\x7F]/S', $payload) ) {
 	header("HTTP/1.0 400 Bad Request");
 	exit;
 }
-$fingerprint = preg_replace("/\s+/", "", file_get_contents("../gpg.fingerprint"));
 $res = gnupg_init();
+$gpg = gnupg_keyinfo($res, $CONTACT);
+$fingerprint = $gpg[0]["subkeys"][0]["fingerprint"]);
 if (! gnupg_adddecryptkey($res, $fingerprint, "")) {
 	header("HTTP/1.0 400 Bad Request");
 	print("Server side key error");
