@@ -15,12 +15,14 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
 --
 -- Name: download; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE download (
-    payload_id bigint NOT NULL,
+    payload_id text NOT NULL,
     creation timestamp with time zone DEFAULT now() NOT NULL
 );
 
@@ -32,7 +34,7 @@ ALTER TABLE public.download OWNER TO postgres;
 --
 
 CREATE TABLE payload (
-    id bigint DEFAULT round(((9223372036854775807::bigint)::double precision * random())) NOT NULL,
+    id text DEFAULT encode(gen_random_bytes(32), 'hex'::text) NOT NULL,
     creation timestamp with time zone DEFAULT now() NOT NULL,
     registration timestamp with time zone,
     expiration timestamp with time zone,
@@ -43,7 +45,7 @@ CREATE TABLE payload (
     filesize integer NOT NULL,
     md5 text NOT NULL,
     sha1 text NOT NULL,
-    auth bigint DEFAULT round(((9223372036854775807::bigint)::double precision * random())) NOT NULL
+    auth text DEFAULT encode(gen_random_bytes(32), 'hex'::text) NOT NULL
 );
 
 
