@@ -55,6 +55,10 @@ $resultset = pg_query_params($CONN, "
 		auth='$2'
 		  and
 		md5='$3'
+		  and
+		creation<=now()
+		  and
+		expiration>=now()
 	returning
 		filename,
 		filesize,
