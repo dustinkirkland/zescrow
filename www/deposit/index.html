@@ -51,28 +51,14 @@ $md5 = md5($cleartext);
 $sha1 = sha1($cleartext);
 $filename = "ecryptfs.tar.gz";
 
-$resultset = pg_query($CONN, "
-	insert into
-		payload
-	(
-		filename,
-		filesize,
-		md5,
-		sha1,
-		payload
-	)
+$resultset = pg_query_params($CONN, "
+	insert into payload
+		(filename, filesize, md5, sha1, payload)
 	values
-	(
-		'" . pg_escape_string($filename) . "',
-		'" . pg_escape_string($filesize) . "',
-		'" . pg_escape_string($md5) . "',
-		'" . pg_escape_string($sha1) . "',
-		'" . pg_escape_string($payload) . "'
-	)
+		($1, $2, $3, $4, $5)
 	returning
-		id,
-		auth
-");
+		id, auth
+", array($filename, $filesize, $md5, $sha1, $payload));
 if (pg_num_rows($resultset) == 1) {
 	$result = pg_fetch_object($resultset, 0);
 	$auth = $result->auth;

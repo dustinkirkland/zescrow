@@ -43,24 +43,24 @@ list($md5, $auth) = preg_split("/-/", $_SESSION["u"], 2);
 
 include("../../include/above.html");
 
-$resultset = pg_query($CONN, "
+$resultset = pg_query_params($CONN, "
 	update
 		payload
 	set
-		email='" . pg_escape_string($EMAIL) . "',
+		email='$1',
 		registration=now()
 	where
 		email is null
 		  and
-		auth='" . pg_escape_string($auth) . "'
+		auth='$2'
 		  and
-		md5='" . pg_escape_string($md5) . "'
+		md5='$3'
 	returning
 		filename,
 		filesize,
 		email,
 		md5
-");
+", array($EMAIL, $auth, $md5));
 if (pg_num_rows($resultset) == 1) {
 	$result = pg_fetch_object($resultset, 0);
 	if (isset($result->email)) {

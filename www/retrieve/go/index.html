@@ -34,17 +34,15 @@ if (!isset($_SESSION["email"]) || empty($_SESSION["email"])) {
 $EMAIL = strtolower(urldecode($_SESSION["email"]));
 assert_email($EMAIL);
 
-$resultset = pg_query($CONN, "
+$resultset = pg_query_params($CONN, "
 	select
-		payload,
-		filename
+		payload, filename
 	from
 		payload
 	where
-		payload.id='" . pg_escape_string($_SESSION["id"]) . "'
-		and
-		payload.email='" . pg_escape_string($EMAIL) . "'
-");
+		payload.id='$1' and payload.email='$2'
+", array($_SESSION["id"], $EMAIL));
+
 if (pg_num_rows($resultset) != 1) {
 	print("Error");
 	exit(0);

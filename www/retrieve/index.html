@@ -36,7 +36,7 @@ include("../include/above.html");
 ?>
 
 <?php
-$resultset = pg_query($CONN, "
+$resultset = pg_query_params($CONN, "
 	select
 		payload.id as id,
 		payload.creation as uploaded,
@@ -47,10 +47,10 @@ $resultset = pg_query($CONN, "
 	from
 		payload
 	where
-		payload.email='" . pg_escape_string($EMAIL) . "'
+		payload.email='$1'
 	order by
 		payload.creation desc
-");
+", array($EMAIL));
 if (pg_num_rows($resultset) > 0) {
 ?>
 <p align=center><b>You have the following deposits available for download:</b></p><br>
