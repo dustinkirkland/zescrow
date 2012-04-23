@@ -83,7 +83,7 @@ if (pg_num_rows($resultset) > 0) {
 		}
 	}
 } else {
-	print("<p align=center>No deposits were found.</p><br>");
+	print("<p align=center>No deposits were found for [" . htmlspecialchars($EMAIL) . "].</p><br>");
 }
 ?>
 </table>
