@@ -52,7 +52,7 @@ Access your deposit(s) at:
 
 This URL will expire in approximately 15 minutes!
 ";
-	$headers .= 'From: Retrievals <' . $CONTACT . '>';
+	$headers = 'From: Retrievals <' . $CONTACT . '>';
 	$rc = mail($recipient, $subject, $message, $headers);
 	return $rc;
 }
