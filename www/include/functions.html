@@ -27,16 +27,6 @@ $SITE = "zEscrow";
 include("credentials.html");
 $CONN = pg_pconnect("host=localhost dbname=$DBNAME user=$DBUSER password=$DBPASSWORD");
 
-function genkey() {
-	$max = 2147483647;
-	$count = 4;
-	$key = "";
-	for ($i=0; $i<$count; $i++) {
-		$key .= rand(1, $max);
-	}
-	return $key;
-}
-
 function error($msg) {
 	print("<center><b>Error: $msg</b></center>");
 	include("below.html");
