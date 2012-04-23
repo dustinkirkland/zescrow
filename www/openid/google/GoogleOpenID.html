@@ -133,9 +133,9 @@
         $server_name_pos = stripos($return_to, $_SERVER['SERVER_NAME']);
         //if server_name is already at position zero
         if($server_name_pos != false && $server_name_pos==0){
-          $return_to = "http://".$return_to;
+          $return_to = "https://".$return_to;
         } else {
-          $return_to = "http://".$_SERVER['SERVER_NAME']."/".$return_to;
+          $return_to = "https://".$_SERVER['SERVER_NAME']."/".$return_to;
         }//else (server name not at position zero)
       }//if return_to is relative
 
