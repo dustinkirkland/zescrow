@@ -4,10 +4,6 @@ AddType application/xrds+xml .xrdf
 RewriteEngine On
 
 RewriteCond %{HTTPS} !=on
-RewriteCond %{REQUEST_FILENAME} !^google
-RewriteRule ^(.*) https://%{SERVER_NAME}/$1 [R,L]
-
-RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*) https://%{SERVER_NAME}/$1 [R,L]
 
 Options -Indexes
