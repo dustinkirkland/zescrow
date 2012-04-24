@@ -67,6 +67,11 @@ if (! isset($TITLE)) {
 <td width=50%><p align="center">
 <big><big><big><b><a href="/"><?php echo $SITE; ?></a></b></big></big></big> <i>(beta)</i><br>
 <b>[<a href="/retrieve">Retrieve a Deposit</a>]<b><br>
+<?php
+if (isset($_SESSION["email"])) {
+	print('[<a href="/logout">Logout</a>]');
+}
+?>
 </p></td>
 </tr>
 </table>
