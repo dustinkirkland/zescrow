@@ -37,7 +37,7 @@ CREATE TABLE payload (
     id text DEFAULT encode(gen_random_bytes(32), 'hex'::text) NOT NULL,
     creation timestamp with time zone DEFAULT now() NOT NULL,
     registration timestamp with time zone,
-    expiration timestamp with time zone,
+    expiration timestamp with time zone DEFAULT '9999-12-31 23:59:59+00'::timestamp with time zone,
     note text,
     payload text NOT NULL,
     email text,
