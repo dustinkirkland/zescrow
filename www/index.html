@@ -35,12 +35,14 @@ include("include/above.html");
 ?>
 
 <table width=700><tr><td bgcolor=#FFFFFF>
-<p>Do you stash an extra house key under a rock or a potted plant, or leave a copy with a trusted neighbor "just in case"?  Do you keep extra copies of important documents in a bank safe deposit box?</p><br>
+<p align=center><b>Welcome to Gazzang zEscrow</b></p><br/>
 
-<p>zEscrow is a digital equivalent of that concept, originally designed for <a href=https://launchpad.net/ecryptfs>eCryptfs</a> users who choose to encrypt their private data using a strong, randomly generated key.</p><br>
+<p>Gazzang zEscrow is a free service for Ubuntu Desktop users who choose to encrypt their home directories.  zEscrow enables a user to deposit a copy of their <pre>~/.ecryptfs/</pre> configuration and random mount passphrase and digitally retrieve it later, if lost or forgotten.</p>
 
-<p>Users of <a href=https://www.ubuntu.com>Ubuntu</a>'s Encrypted Home Directory are prompted on first boot to record their long, random mount passkey.  These users <i>should</i> print it out, write it down, and store the hard copy in a safe, secure physical location.  Some of these users may choose to deposit a copy of their <code>~/.ecryptfs/</code> configuration and random mount passphrase here at <a href="/">zEscrow</a>, "just in case", so that they can digitally <a href=/retrieve>retrieve</a> it later if necessary.  On a command line, just run the command:</p><br>
-<center><big><big><b><code><a href=https://bazaar.launchpad.net/~zescrow/zescrow/trunk/view/head:/usr/bin/zescrow>ecryptfs-escrow-private</a></code></b></big></big></center>
+<p>The service is simple to use!  Just install the <a href="apt:zescrow-client">zescrow-client</a> package on your Ubuntu system and run the <a href="http://manpg.es/zEscrow">zescrow</a> command.  You will be guided through the process and then back here to the zEscrow login.  You can recover your data by retrieving your backup from zEscrow, and then using the <a href="http://manpg.es/ecryptfs-recover-private">ecryptfs-recover-private</a> tool.</p>
+
+<br/><br/><p>Gazzang offers a family of data encryption, key management, and operational monitoring products for cloud computing.  Visit <a href="http://www.gazzang.com">gazzang.com</a> for more information.
+
 </td></tr></table>
 
 <?php
