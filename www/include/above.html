@@ -32,7 +32,7 @@ if (! isset($TITLE)) {
 
 <html>
 <head>
-<title><?php print("$SITE (beta): $TITLE"); ?></title>
+<title><?php print("$SITE: $TITLE"); ?></title>
 <link rel="stylesheet" type="text/css" href="/include/escrow.css" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <style type="text/css" >
@@ -64,7 +64,6 @@ if (! isset($TITLE)) {
 <tr>
 <td width=50%><a href=http://www.gazzang.com><img src="/include/gazzang_logo.png" border=0></a></td>
 <td width=50%><p align="center">
-<big><big><big><b><a href="/"><?php echo $SITE; ?></a></b></big></big></big> <i>(beta)</i><br>
 <a href="/retrieve"><img src="/include/retrieve.jpg" alt="retrieve a deposit"></a>
 <?php
 if (isset($_SESSION["email"])) {
