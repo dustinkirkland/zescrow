@@ -1,7 +1,7 @@
 <?php
 /*
 
-    zEscrow: web application for securely escrowing keys
+    zEscrow™: web application for securely escrowing keys
     - include/functions.html: common functions
 
     Copyright (C) 2008-2012 Scot-Irish Lads, LLC
@@ -23,7 +23,7 @@
 
 */
 
-$SITE = "zEscrow";
+$SITE = "zEscrow™";
 include("credentials.html");
 $CONN = pg_pconnect("host=localhost dbname=$DBNAME user=$DBUSER password=$DBPASSWORD");
 
@@ -35,7 +35,7 @@ function error($msg) {
 
 function mailer($recipient, $key) {
 	global $URL;
-	$subject = "zEscrow Retrieval";
+	$subject = "zEscrow™ Retrieval";
 	$message = "
 Access your deposit(s) at:
         $URL/retrieve/download/?key=$key
