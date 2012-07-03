@@ -2,7 +2,7 @@
 # zEscrow - aka ecryptfs-escrow-private
 # Copyright (C) 2012 Gazzang, Inc.
 # Copyright (C) 2012 Wesley Wiedenmeier
-# Authors: Wesley Wiedenmeier <magicalchicken@mail.magicalchicken.dnsdynamic.net
+# Authors: Wesley Wiedenmeier <magicalchicken@mail.magicalchicken.dnsdynamic.net>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -17,46 +17,38 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import re
 if sys.version_info > (3, 0):
-    from gi.repository import Gtk
+    from gi.repository import Gtk as gtk
 else:
     import gtk
+import re
 import subprocess
 
-class zEscrow_Client:
-    #global variables:
-    if sys.version_info > (3, 0):
-        serverNameEntry = Gtk.Entry()
-        passwordEntry = Gtk.Entry()
-        passwordDialog = Gtk.Window()
-    else:
-        serverNameEntry = gtk.Entry(max=0)
-        passwordEntry = gtk.Entry(max=0)
-        passwordDialog = gtk.Window(gtk.WINDOW_TOPLEVEL)
 
-    #functions:
+class zEscrowClient:
+    serverNameEntry = gtk.Entry()
+    passwordEntry = gtk.Entry()
+    passwordDialog = gtk.Window()
+
     def destroy(self, widget, data=None):
-        if sys.version_info > (3, 0):
-            Gtk.main_quit()
-        else:
-            gtk.main_quit()
+        """destroy the window"""
+        gtk.main_quit()
 
-    def useScript (self, widget, data=None):
+    def use_script(self, widget, data=None):
+        """use the zEscrow script and draw the final window"""
         passwd = self.passwordEntry.get_text()
-        pipe = subprocess.Popen(["zEscrow", self.serverNameEntry.get_text()], stderr=subprocess.PIPE, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        stdout_value, stderr_value = pipe.communicate(self.passwordEntry.get_text().encode('utf-8'))
+        pipe = subprocess.Popen(
+            ["zEscrow", self.serverNameEntry.get_text()],
+            stderr=subprocess.PIPE, stdout=subprocess.PIPE,
+            stdin=subprocess.PIPE)
+        stdout_value, stderr_value = pipe.communicate(
+            self.passwordEntry.get_text().encode('utf-8'))
         output = stdout_value.decode('utf-8')
         errValue = stderr_value.decode('utf-8')
         self.passwordDialog.destroy()
-        if sys.version_info > (3, 0):
-            finalVBox = Gtk.VBox(False, 2)
-            okButton = Gtk.Button("Ok")
-            finalWindow = Gtk.Window()
-        else:
-            finalVBox = gtk.VBox(False, 2)
-            okButton = gtk.Button("Ok")
-            finalWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        finalVBox = gtk.VBox(False, 2)
+        okButton = gtk.Button("Ok")
+        finalWindow = gtk.Window()
         if pipe.returncode == 0:
             if re.search('^URL:.https:.*$', output, re.M):
                 match = re.search('^URL:.https:.*$', output, re.M)
@@ -65,112 +57,107 @@ class zEscrow_Client:
                     match = re.search('https:.*$', returnURL)
                     returnURL = match.group(0)
                     print (returnURL)
-                    finalText = "Your mount passphrase has been sent to "+self.serverNameEntry.get_text()+" successfully. In order to complete the escrow you need to login to openid. Just click on the link below and sign in. Thank You."
-                    linkText = "\n<a href=\""+returnURL+"\">Open ID Login Link</a>"
-                    if sys.version_info > (3, 0):
-                        linkLabel = Gtk.Label()
-                        linkLabel.set_markup(linkText)
-                        linkLabel.set_line_wrap(True)
-                        finalLabel = Gtk.Label(finalText)
-                        finalLabel.set_line_wrap(True)
-                    else:
-                        linkLabel = gtk.Label()
-                        linkLabel.set_markup(linkText)
-                        linkLabel.set_line_wrap(True)
-                        finalLabel = gtk.Label(finalText)
-                        finalLabel.set_line_wrap(True)
+                    finalText = """
+Your mount passphrase has been uploaded successfully.
+In order to complete the escrow you need to login to openid.
+Just click on the link below and sign in. Thank You."""
+                    linkText = "\n<a href=\"" + returnURL + \
+                        "\">Open ID Login Link</a>"
+                    linkLabel = gtk.Label()
+                    linkLabel.set_markup(linkText)
+                    linkLabel.set_line_wrap(True)
+                    finalLabel = gtk.Label(finalText)
+                    finalLabel.set_line_wrap(True)
                     finalVBox.pack_start(finalLabel, True, True, 0)
                     finalVBox.pack_start(linkLabel, True, True, 0)
                     okButton.connect("clicked", self.destroy)
                 else:
-                    finalText = "An error has occured:\n"+errValue+"\n Please try again."
-                    if sys.version_info > (3, 0):
-                        finalLabel = Gtk.Label(finalText)
-                    else: 
-                        finalLabel = gtk.Label(finalText)
+                    finalText = "An error has occured:\n" + errValue \
+                        + "\n Please try again."
+                    finalLabel = gtk.Label(finalText)
                     finalLabel.set_line_wrap(True)
                     finalVBox.pack_start(finalLabel, True, True, 0)
-                    okButton.connect("clicked",
-                            lambda x: finalWindow.destroy())
+                    okButton.connect(
+                        "clicked", lambda x: finalWindow.destroy())
             else:
-                finalText = "An error has occured:\n"+errValue+"\n Please try again."
-                if sys.version_info > (3, 0):
-                    finalLabel = Gtk.Label(finalText)
-                else: 
-                    finalLabel = gtk.Label(finalText)
+                finalText = "An error has occured:\n" + errValue \
+                    + "\n Please try again."
+                finalLabel = gtk.Label(finalText)
                 finalLabel.set_line_wrap(True)
                 finalVBox.pack_start(finalLabel, True, True, 0)
-                okButton.connect("clicked",
-                        lambda x: finalWindow.destroy())
+                okButton.connect(
+                    "clicked", lambda x: finalWindow.destroy())
         else:
-            finalText = "An error has occured:\n"+errValue+"\n Please try again."
-            if sys.version_info > (3, 0):
-                finalLabel = Gtk.Label(finalText)
-            else: 
-                finalLabel = gtk.Label(finalText)
+            finalText = "An error has occured:\n" + errValue \
+                + "\n Please try again."
+            finalLabel = gtk.Label(finalText)
             finalLabel.set_line_wrap(True)
             finalVBox.pack_start(finalLabel, True, True, 0)
-            okButton.connect("clicked",
-                    lambda x: finalWindow.destroy())
+            okButton.connect(
+                "clicked", lambda x: finalWindow.destroy())
         finalVBox.pack_start(okButton, False, False, 0)
         finalWindow.set_title("zEscrow Client Gtk Frontend")
         finalWindow.set_border_width(12)
         finalWindow.add(finalVBox)
         finalWindow.show_all()
 
-    def askForPassword(self, widget, data=None):
-        passwordAskingText = "Please enter your login password to continue with sending passphrase to "+self.serverNameEntry.get_text()+". It is needed to unwap the mount password. It will NOT be sent to the server or be recorded in any way. Uploading may take a while, please be patient. \n"
-        if sys.version_info > (3, 0):
-            passwordAskingLabel = Gtk.Label(passwordAskingText)
-            passwordAskingLabel.set_line_wrap(True)
-            passwordVBox = Gtk.VBox(False, 2)
-            passwordVBox.pack_start(passwordAskingLabel, True, True, 0)
-            self.passwordEntry.set_visibility(False)
-            passwordVBox.pack_start(self.passwordEntry, False, False, 0)
-            buttonsTable = Gtk.Table(1, 2, True)
-            startButton = Gtk.Button("Upload")
-            startButton.connect("clicked", self.useScript)
-            buttonsTable.attach(startButton, 0, 1, 0, 1)
-            quitButton = Gtk.Button("Cancel")
-        else:
-            passwordAskingLabel = gtk.Label(passwordAskingText)
-            passwordAskingLabel.set_line_wrap(True)
-            passwordVBox = gtk.VBox(False, 2)
-            passwordVBox.pack_start(passwordAskingLabel, True, True, 0)
-            self.passwordEntry.set_visibility(False)
-            passwordVBox.pack_start(self.passwordEntry, False, False, 0)
-            buttonsTable = gtk.Table(1, 2, True)
-            startButton = gtk.Button("Upload")
-            startButton.connect("clicked", self.useScript)
-            buttonsTable.attach(startButton, 0, 1, 0, 1)
-            quitButton = gtk.Button("Cancel")
+    def ask_for_password(self, widget, data=None):
+        """draw the window asking for the login passphrase"""
+        f = open("/usr/share/zEscrow/password-text", "r")
+        passwordAskingText = f.read()
+        passwordAskingText = re.sub("#", "", passwordAskingText)
+        f.close
+        passwordAskingLabel = gtk.Label(passwordAskingText)
+        passwordAskingLabel.set_line_wrap(True)
+        passwordAskingLabel.set_size_request(500, 80)
+        passwordVBox = gtk.VBox(False, 2)
+        passwordVBox.pack_start(passwordAskingLabel, True, True, 0)
+        self.passwordEntry.set_visibility(False)
+        passwordVBox.pack_start(self.passwordEntry, False, False, 0)
+        buttonsTable = gtk.Table(1, 2, True)
+        startButton = gtk.Button("Upload")
+        startButton.connect("clicked", self.use_script)
+        buttonsTable.attach(startButton, 0, 1, 0, 1)
+        quitButton = gtk.Button("Cancel")
         buttonsTable.attach(quitButton, 1, 2, 0, 1)
         passwordVBox.pack_start(buttonsTable, False, False, 0)
-        quitButton.connect("clicked", 
-                lambda x: self.passwordDialog.destroy())
+        quitButton.connect(
+            "clicked", lambda x: self.passwordDialog.destroy())
         self.passwordDialog.set_title("zEscrow Client Gtk Frontend")
         self.passwordDialog.add(passwordVBox)
         self.passwordDialog.set_border_width(12)
         self.passwordDialog.show_all()
 
-    def about (self, widget, data=None):
-        aboutLabelText = "zEscrow - aka ecryptfs-escrow-private \n Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com> \n Copyrignt (C) 2012 Scot-Irish Lads, LLC \n Copyrignt (C) 2012 Gazzang, Inc. \n Authors: Dustin Kirkland <dustin.kirkland@gmail.com> \n\n This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, version 3 of the License.  This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more details.  You should have received a copy of the GNU Affero General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>."
-        if sys.version_info > (3, 0):
-            aboutLabel = Gtk.Label(aboutLabelText)
-            aboutLabel.set_line_wrap(True)
-            okButton = Gtk.Button("Ok")
-            aboutVBox = Gtk.VBox(False, 2)
-            aboutVBox.pack_start(aboutLabel, True, True, 0)
-            aboutWindow = Gtk.Window()
-        else:
-            aboutLabel = gtk.Label(aboutLabelText)
-            aboutLabel.set_line_wrap(True)
-            okButton = gtk.Button("Ok")
-            aboutVBox = gtk.VBox(False, 2)
-            aboutVBox.pack_start(aboutLabel, True, True, 0)
-            aboutWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        okButton.connect("clicked",
-                lambda x: aboutWindow.destroy())
+    def about(self, widget, data=None):
+        """draw the window containing legal information"""
+        aboutLabelText = """
+zEscrow - aka ecryptfs-escrow-private
+Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
+Copyright (C) 2012 Scot-Irish Lads, LLC
+Copyright (C) 2012 Gazzang, Inc.
+
+Authors: Dustin Kirkland <dustin.kirkland@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, version 3 of the License.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+        """
+        aboutLabel = gtk.Label(aboutLabelText)
+        aboutLabel.set_line_wrap(True)
+        okButton = gtk.Button("Ok")
+        aboutVBox = gtk.VBox(False, 2)
+        aboutVBox.pack_start(aboutLabel, True, True, 0)
+        aboutWindow = gtk.Window()
+        okButton.connect(
+            "clicked", lambda x: aboutWindow.destroy())
         aboutVBox.pack_start(okButton, False, False, 0)
         aboutWindow.set_title("About")
         aboutWindow.add(aboutVBox)
@@ -178,91 +165,60 @@ class zEscrow_Client:
         aboutWindow.show_all()
 
     def __init__(self):
-        if sys.version_info > (3, 0):
-            menuBar = Gtk.MenuBar()
-        else:
-            menuBar = gtk.MenuBar()
+        """draw the main window"""
+        menuBar = gtk.MenuBar()
 
-        if sys.version_info > (3, 0):
-            fileMenu = Gtk.Menu()
-            fileM = Gtk.MenuItem("File")
-        else:
-            fileMenu = gtk.Menu()
-            fileM = gtk.MenuItem("File")
+        fileMenu = gtk.Menu()
+        fileM = gtk.MenuItem("File")
         fileM.set_submenu(fileMenu)
 
-        if sys.version_info > (3, 0):
-            helpMenu = Gtk.Menu()
-            helpM = Gtk.MenuItem("Help")
-            helpM.set_submenu(helpMenu)
-            about = Gtk.MenuItem("About")
-        else:
-            helpMenu = gtk.Menu()
-            helpM = gtk.MenuItem("Help")
-            helpM.set_submenu(helpMenu)
-            about = gtk.MenuItem("About")
+        helpMenu = gtk.Menu()
+        helpM = gtk.MenuItem("Help")
+        helpM.set_submenu(helpMenu)
+        about = gtk.MenuItem("About")
         about.connect("activate", self.about)
         helpMenu.append(about)
 
-        if sys.version_info > (3, 0):
-            quit = Gtk.MenuItem("Quit")
-        else:
-            quit = gtk.MenuItem("Quit")
+        quit = gtk.MenuItem("Quit")
         quit.connect("activate", self.destroy)
         fileMenu.append(quit)
 
         menuBar.append(fileM)
         menuBar.append(helpM)
 
-        if sys.version_info > (3, 0):
-            mainBox = Gtk.VBox(False, 2)
-        else:
-            mainBox = gtk.VBox(False, 2)
+        mainBox = gtk.VBox(False, 2)
         mainBox.pack_start(menuBar, False, False, 0)
 
-        mainMessageText = "Welcome to zEscrow, a free tool to back up ecryptfs mount passphrases. Your ecryptfs passphrase will be sent encrypted to a server, to avoid the risk of data loss due to forgetting your login password. The default server (zescrow.gazzang.com) is secure and suitable for most uses, but a specific server can be specified if desired. You must use ssl in connecting to the server. \n"
-        if sys.version_info > (3, 0):
-            mainMessage = Gtk.Label(mainMessageText)
-        else:
-            mainMessage = gtk.Label(mainMessageText)
+        f = open("/usr/share/zEscrow/welcome-text", "r")
+        mainMessageText = f.read()
+        mainMessageText = re.sub("#", "", mainMessageText)
+        f.close()
+        mainMessage = gtk.Label(mainMessageText)
         mainMessage.set_line_wrap(True)
+        mainMessage.set_size_request(550, 310)
         mainBox.pack_start(mainMessage, True, True, 0)
-        
+
         self.serverNameEntry.set_text("https://zescrow.gazzang.com")
         serverNameEntryMessage = "zEscrow server to use:"
-        if sys.version_info > (3, 0):
-            serverNameEntryMessageLabel = Gtk.Label(serverNameEntryMessage)
-        else:
-            serverNameEntryMessageLabel = gtk.Label(serverNameEntryMessage)
+        serverNameEntryMessageLabel = gtk.Label(serverNameEntryMessage)
         serverNameEntryMessageLabel.set_line_wrap(True)
         mainBox.pack_start(serverNameEntryMessageLabel, False, False, 0)
         mainBox.pack_start(self.serverNameEntry, True, True, 0)
 
-        if sys.version_info > (3, 0):
-            buttonsTable = Gtk.Table(1, 2, True)
-        else:
-            buttonsTable = gtk.Table(1, 2, True)
+        buttonsTable = gtk.Table(1, 2, True)
 
-        if sys.version_info > (3, 0):
-            startButton = Gtk.Button("Continue")
-        else:
-            startButton = gtk.Button("Continue")
-        startButton.connect("clicked", self.askForPassword)
+        startButton = gtk.Button("Continue")
+        startButton.connect("clicked", self.ask_for_password)
         buttonsTable.attach(startButton, 0, 1, 0, 1)
 
-        if sys.version_info > (3, 0):
-            quitButton = Gtk.Button("Quit")
-        else:
-            quitButton = gtk.Button("Quit")
+        quitButton = gtk.Button("Quit")
         quitButton.connect("clicked", self.destroy)
         buttonsTable.attach(quitButton, 1, 2, 0, 1)
 
         mainBox.pack_start(buttonsTable, False, False, 0)
 
-        if sys.version_info > (3, 0):
-            self.window = Gtk.Window()
-        else:
-            self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.window = gtk.Window()
+        self.window.set_size_request(550, 450)
         self.window.connect("destroy", self.destroy)
         self.window.set_title("zEscrow Client Gtk Frontend")
         self.window.set_border_width(12)
@@ -270,11 +226,10 @@ class zEscrow_Client:
         self.window.show_all()
 
     def main(self):
-        if sys.version_info > (3, 0):
-            Gtk.main()
-        else:
-            gtk.main()
+        """call main"""
+        gtk.main()
 
 if __name__ == "__main__":
-    client = zEscrow_Client()
+    """define main"""
+    client = zEscrowClient()
     client.main()

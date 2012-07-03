@@ -1,0 +1,21 @@
+#####################################################################
+# Some eCryptfs users choose to store a backup of of their eCryptfs
+# configuration and their randomly generated MOUNT passphrase on an
+# escrow server for retrieval later, as it will be REQUIRED if you
+# ever need to recover your encrypted data.
+#
+# You will be prompted for:
+#  - a key escrow server
+#  - your LOGIN passphrase (which is NOT sent to the server!)
+#
+# Your LOGIN passphrase will be used to decrypt your MOUNT passphrase
+# and create an archive of your ~/.ecryptfs/ configuration and your
+# MOUNT passphrase.  It will be encrypted with a public key unique to
+# your chosen open source key escrow server compatible with
+# zEscrow.
+#
+# After a successful upload, you MUST click on the generated URL and
+# login using a Google OpenID account, and associate your account
+# with this upload.  Access to that account will be  REQUIRED to
+# securely retrieve your escrowed data later!
+#####################################################################
