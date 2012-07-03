@@ -123,6 +123,11 @@ else
 	passphrase=$(cat /dev/stdin)
 fi
 
+# Catch blank passphrases
+if [ -z $passphrase ]; then
+    error "Missing passphrase."
+fi
+
 if !(printf "%s" "$passphrase" | ecryptfs-unwrap-passphrase "$HOME/.ecryptfs/wrapped-passphrase" - > "$tempdir/ecryptfs/unwrapped-passphrase"); then
 	error "Failed to unwrap passphrase.  Incorrect LOGIN passphrase?"
 fi
