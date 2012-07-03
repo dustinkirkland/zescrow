@@ -6,6 +6,12 @@ zescrow (1.4) unreleased; urgency=low
     - disable url open and includes
   * www/robots.txt:
     - disable all scanning
+  * usr/bin/zEscrow:
+    - support taking a zEscrow server name as arg1
+    - support taking a wrapping passphrase on stdin
+    - auto-retry uploads to the server up to 30 times
+    - when non-interactive, print "URL: %s" as last line
+      for machine consumption
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Apr 2012 12:12:22 -0500
 
