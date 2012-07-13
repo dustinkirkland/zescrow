@@ -42,29 +42,8 @@ trap "(rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null) || true" EXIT HUP INT QUI
 
 if [ -z "$1" ]; then
 	# No server specified, prompt interactively
-	echo "
-#####################################################################
-# Some eCryptfs users choose to store a backup of of their eCryptfs
-# configuration and their randomly generated MOUNT passphrase on an
-# escrow server for retrieval later, as it will be REQUIRED if you
-# ever need to recover your encrypted data.
-#
-# You will be prompted for:
-#  - a key escrow server
-#  - your LOGIN passphrase (which is NOT sent to the server!)
-#
-# Your LOGIN passphrase will be used to decrypt your MOUNT passphrase
-# and create an archive of your ~/.ecryptfs/ configuration and your
-# MOUNT passphrase.  It will be encrypted with a public key unique to
-# your chosen open source key escrow server compatible with
-# zEscrow.
-#
-# After a successful upload, you MUST click on the generated URL and
-# login using a Google OpenID account, and associate your account
-# with this upload.  Access to that account will be  REQUIRED to
-# securely retrieve your escrowed data later!
-#####################################################################
-"
+    cat "/usr/share/zEscrow/welcome-text"
+
 	# Get the zEscrow server
 	# NOTE: Use lower case "e" here, messes with SSL cert
 	default_server="https://zescrow.gazzang.com"
@@ -102,14 +81,8 @@ chmod 600 "$tempdir/ecryptfs/unwrapped-passphrase"
 
 if [ -t 0 ]; then
 	# Interactively prompt for login passphrase
-	echo "
-#####################################################################
-# Your LOGIN passphrase is required to unwrap your randomly generated
-# MOUNT passphrase.  The key escrow server will NOT store your login
-# passphrase.  It will only store your randomly generated MOUNT
-# passphrase.
-#####################################################################
-"
+    cat "/usr/share/zEscrow/password-text"
+
 	# Store the stty, which we modify
 	stty_orig=$(stty -g)
 	trap "(stty $stty_orig; rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null) || true" EXIT HUP INT QUIT TERM
@@ -121,6 +94,11 @@ if [ -t 0 ]; then
 else
 	# Wrapping passphrase is on stdin
 	passphrase=$(cat /dev/stdin)
+fi
+
+# Catch blank passphrases
+if [ -z $passphrase ]; then
+    error "Missing passphrase."
 fi
 
 if !(printf "%s" "$passphrase" | ecryptfs-unwrap-passphrase "$HOME/.ecryptfs/wrapped-passphrase" - > "$tempdir/ecryptfs/unwrapped-passphrase"); then

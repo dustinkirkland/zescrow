@@ -1,5 +1,6 @@
 zescrow (1.4) unreleased; urgency=low
 
+  [ Dustin Kirkland ]
   * INSTALL:
     - limit uploads to 5K
     - limit to one file uploaded at a time
@@ -12,6 +13,14 @@ zescrow (1.4) unreleased; urgency=low
     - auto-retry uploads to the server up to 30 times
     - when non-interactive, print "URL: %s" as last line
       for machine consumption
+
+  [ Wesley Wiedenmeier ]
+  * === added directory usr/share/zEscrow, usr/bin/zEscrow,
+    usr/bin/zEscrow-graphical, usr/share/zEscrow/password-text,
+    usr/share/zEscrow/welcome-text:
+    - add a GTK graphical front end
+    - move the common prompting text to flat text files usable
+      by both the cli and gui
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Apr 2012 12:12:22 -0500
 
