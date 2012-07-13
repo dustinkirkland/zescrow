@@ -5,6 +5,7 @@
 #    Copyright (C) 2012 Gazzang, Inc.
 #
 #    Authors: Dustin Kirkland <dustin.kirkland@gmail.com>
+#    	      Wesley Wiedenmeier <magicalchicken@mail.magicalchicken.dnsdynamic.net>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -42,7 +43,7 @@ trap "(rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null) || true" EXIT HUP INT QUI
 
 if [ -z "$1" ]; then
 	# No server specified, prompt interactively
-    cat "/usr/share/zEscrow/welcome-text"
+    cat "/usr/share/$PKG/welcome-text"
 
 	# Get the zEscrow server
 	# NOTE: Use lower case "e" here, messes with SSL cert
@@ -81,7 +82,7 @@ chmod 600 "$tempdir/ecryptfs/unwrapped-passphrase"
 
 if [ -t 0 ]; then
 	# Interactively prompt for login passphrase
-    cat "/usr/share/zEscrow/password-text"
+    cat "/usr/share/$PKG/password-text"
 
 	# Store the stty, which we modify
 	stty_orig=$(stty -g)

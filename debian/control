@@ -13,6 +13,8 @@ Depends: ${misc:Depends},
  ecryptfs-utils,
  gnupg,
  sensible-utils,
+ python,
+ python-gtk2,
 Enhances:
  ecryptfs-utils
 Replaces:

@@ -13,6 +13,8 @@ zescrow (1.4) unreleased; urgency=low
     - auto-retry uploads to the server up to 30 times
     - when non-interactive, print "URL: %s" as last line
       for machine consumption
+  * debian/control, usr/bin/zEscrow, usr/bin/zEscrow-graphical:
+    - added python deps, updated PKG, copyright
 
   [ Wesley Wiedenmeier ]
   * === added directory usr/share/zEscrow, usr/bin/zEscrow,
