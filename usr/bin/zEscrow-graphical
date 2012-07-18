@@ -26,28 +26,28 @@ import subprocess
 
 class zEscrowClient:
     serverNameEntry = gtk.Entry()
+    serverName = "https://zescrow.gazzang.com"
     passwordEntry = gtk.Entry()
-    passwordDialog = gtk.Window()
+    passwordVBox = gtk.VBox(False, 2)
+    finalVBox = gtk.VBox(False, 2)
+    mainBox = gtk.VBox(False, 2)
 
-    def destroy(self, widget, data=None):
+    def destroy(self, widget):
         """destroy the window"""
         gtk.main_quit()
 
-    def use_script(self, widget, data=None):
+    def use_script(self, widget):
         """use the zEscrow script and draw the final window"""
         passwd = self.passwordEntry.get_text()
         pipe = subprocess.Popen(
-            ["zEscrow", self.serverNameEntry.get_text()],
+            ["zEscrow", self.serverName],
             stderr=subprocess.PIPE, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE)
         stdout_value, stderr_value = pipe.communicate(
             self.passwordEntry.get_text().encode('utf-8'))
         output = stdout_value.decode('utf-8')
         errValue = stderr_value.decode('utf-8')
-        self.passwordDialog.destroy()
-        finalVBox = gtk.VBox(False, 2)
         okButton = gtk.Button("Ok")
-        finalWindow = gtk.Window()
         if pipe.returncode == 0:
             if re.search('^URL:.https:.*$', output, re.M):
                 match = re.search('^URL:.https:.*$', output, re.M)
@@ -67,41 +67,38 @@ Just click on the link below and sign in. Thank You."""
                     linkLabel.set_line_wrap(True)
                     finalLabel = gtk.Label(finalText)
                     finalLabel.set_line_wrap(True)
-                    finalVBox.pack_start(finalLabel, True, True, 0)
-                    finalVBox.pack_start(linkLabel, True, True, 0)
+                    self.finalVBox.pack_start(finalLabel, True, True, 0)
+                    self.finalVBox.pack_start(linkLabel, True, True, 0)
                     okButton.connect("clicked", self.destroy)
                 else:
                     finalText = "An error has occured:\n" + errValue \
                         + "\n Please try again."
                     finalLabel = gtk.Label(finalText)
                     finalLabel.set_line_wrap(True)
-                    finalVBox.pack_start(finalLabel, True, True, 0)
-                    okButton.connect(
-                        "clicked", lambda x: finalWindow.destroy())
+                    self.finalVBox.pack_start(finalLabel, True, True, 0)
+                    okButton.connect("clicked", self.draw_main_window)
             else:
                 finalText = "An error has occured:\n" + errValue \
                     + "\n Please try again."
                 finalLabel = gtk.Label(finalText)
                 finalLabel.set_line_wrap(True)
-                finalVBox.pack_start(finalLabel, True, True, 0)
-                okButton.connect(
-                    "clicked", lambda x: finalWindow.destroy())
+                self.finalVBox.pack_start(finalLabel, True, True, 0)
+                okButton.connect("clicked", self.draw_main_window)
         else:
             finalText = "An error has occured:\n" + errValue \
                 + "\n Please try again."
             finalLabel = gtk.Label(finalText)
             finalLabel.set_line_wrap(True)
-            finalVBox.pack_start(finalLabel, True, True, 0)
-            okButton.connect(
-                "clicked", lambda x: finalWindow.destroy())
-        finalVBox.pack_start(okButton, False, False, 0)
-        finalWindow.set_title("zEscrow Client Gtk Frontend")
-        finalWindow.set_border_width(12)
-        finalWindow.add(finalVBox)
-        finalWindow.show_all()
+            self.finalVBox.pack_start(finalLabel, True, True, 0)
+            okButton.connect("clicked", self.draw_main_window)
+        self.finalVBox.pack_start(okButton, False, False, 0)
+        self.passwordVBox.destroy()
+        self.window.add(self.finalVBox)
+        self.window.show_all()
 
-    def ask_for_password(self, widget, data=None):
+    def ask_for_password(self, widget):
         """draw the window asking for the login passphrase"""
+        self.serverName = self.serverNameEntry.get_text()
         f = open("/usr/share/zEscrow/password-text", "r")
         passwordAskingText = f.read()
         passwordAskingText = re.sub("#", "", passwordAskingText)
@@ -109,25 +106,22 @@ Just click on the link below and sign in. Thank You."""
         passwordAskingLabel = gtk.Label(passwordAskingText)
         passwordAskingLabel.set_line_wrap(True)
         passwordAskingLabel.set_size_request(500, 80)
-        passwordVBox = gtk.VBox(False, 2)
-        passwordVBox.pack_start(passwordAskingLabel, True, True, 0)
+        self.passwordVBox.pack_start(passwordAskingLabel, True, True, 0)
         self.passwordEntry.set_visibility(False)
-        passwordVBox.pack_start(self.passwordEntry, False, False, 0)
+        self.passwordVBox.pack_start(self.passwordEntry, False, False, 0)
         buttonsTable = gtk.Table(1, 2, True)
         startButton = gtk.Button("Upload")
         startButton.connect("clicked", self.use_script)
         buttonsTable.attach(startButton, 0, 1, 0, 1)
         quitButton = gtk.Button("Cancel")
+        quitButton.connect("clicked", self.draw_main_window)
         buttonsTable.attach(quitButton, 1, 2, 0, 1)
-        passwordVBox.pack_start(buttonsTable, False, False, 0)
-        quitButton.connect(
-            "clicked", lambda x: self.passwordDialog.destroy())
-        self.passwordDialog.set_title("zEscrow Client Gtk Frontend")
-        self.passwordDialog.add(passwordVBox)
-        self.passwordDialog.set_border_width(12)
-        self.passwordDialog.show_all()
+        self.passwordVBox.pack_start(buttonsTable, False, False, 0)
+        self.mainBox.destroy()
+        self.window.add(self.passwordVBox)
+        self.window.show_all()
 
-    def about(self, widget, data=None):
+    def about(self, widget):
         """draw the window containing legal information"""
         aboutLabelText = """
 zEscrow - aka ecryptfs-escrow-private
@@ -163,8 +157,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         aboutWindow.set_border_width(12)
         aboutWindow.show_all()
 
-    def __init__(self):
-        """draw the main window"""
+    def draw_main_window(self, widget):
+        """draw main window"""
+        self.finalVBox.destroy()
+        self.passwordVBox.destroy()
         menuBar = gtk.MenuBar()
 
         fileMenu = gtk.Menu()
@@ -185,24 +181,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         menuBar.append(fileM)
         menuBar.append(helpM)
 
-        mainBox = gtk.VBox(False, 2)
-        mainBox.pack_start(menuBar, False, False, 0)
+        self.mainBox.pack_start(menuBar, False, False, 0)
 
         f = open("/usr/share/zEscrow/welcome-text", "r")
         mainMessageText = f.read()
         mainMessageText = re.sub("#", "", mainMessageText)
+        serverNameEntryMessage = "zEscrow server to use:"
+        mainMessageText = mainMessageText + serverNameEntryMessage
         f.close()
         mainMessage = gtk.Label(mainMessageText)
         mainMessage.set_line_wrap(True)
-        mainMessage.set_size_request(550, 310)
-        mainBox.pack_start(mainMessage, True, True, 0)
+        mainMessage.set_size_request(515, 375)
+        self.mainBox.pack_start(mainMessage, True, True, 0)
 
         self.serverNameEntry.set_text("https://zescrow.gazzang.com")
-        serverNameEntryMessage = "zEscrow server to use:"
-        serverNameEntryMessageLabel = gtk.Label(serverNameEntryMessage)
-        serverNameEntryMessageLabel.set_line_wrap(True)
-        mainBox.pack_start(serverNameEntryMessageLabel, False, False, 0)
-        mainBox.pack_start(self.serverNameEntry, True, True, 0)
+        self.mainBox.pack_start(self.serverNameEntry, True, True, 0)
 
         buttonsTable = gtk.Table(1, 2, True)
 
@@ -214,15 +207,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         quitButton.connect("clicked", self.destroy)
         buttonsTable.attach(quitButton, 1, 2, 0, 1)
 
-        mainBox.pack_start(buttonsTable, False, False, 0)
+        self.mainBox.pack_start(buttonsTable, False, False, 0)
 
-        self.window = gtk.Window()
-        self.window.set_size_request(550, 450)
         self.window.connect("destroy", self.destroy)
         self.window.set_title("zEscrow Client Gtk Frontend")
         self.window.set_border_width(12)
-        self.window.add(mainBox)
+        self.window.add(self.mainBox)
         self.window.show_all()
+
+    def __init__(self):
+        """initiate and call func to draw main window"""
+        self.window = gtk.Window()
+        self.draw_main_window(gtk.Window())
 
     def main(self):
         """call main"""
