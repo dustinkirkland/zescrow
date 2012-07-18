@@ -1,4 +1,4 @@
-zescrow (1.4) unreleased; urgency=low
+zescrow (1.4-0ubuntu1) quantal; urgency=low
 
   [ Dustin Kirkland ]
   * INSTALL:
@@ -32,7 +32,7 @@ zescrow (1.4) unreleased; urgency=low
       by both the cli and gui
     - rework the panel handling
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Sat, 07 Apr 2012 12:12:22 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 18 Jul 2012 18:27:30 -0500
 
 zescrow (1.3-0ubuntu1) precise; urgency=low
 
