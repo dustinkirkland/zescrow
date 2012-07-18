@@ -17,6 +17,9 @@ zescrow (1.4) unreleased; urgency=low
     - added python deps, updated PKG, copyright
   * www/include/below.html, www/include/zEscrow_Banner.jpg:
     - add some overt Gazzang advertising
+  * usr/bin/zEscrow, usr/bin/zEscrow-cli, usr/bin/zEscrow-graphical =>
+    usr/bin/zEscrow-gui:
+    - add a wrapper for the -cli and -gui
 
   [ Wesley Wiedenmeier ]
   * === added directory usr/share/zEscrow, usr/bin/zEscrow,

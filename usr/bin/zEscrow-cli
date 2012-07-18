@@ -1,0 +1,158 @@
+#!/bin/sh
+#    zEscrow - aka ecryptfs-escrow-private
+#    Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
+#    Copyright (C) 2012 Scot-Irish Lads, LLC
+#    Copyright (C) 2012 Gazzang, Inc.
+#
+#    Authors: Dustin Kirkland <dustin.kirkland@gmail.com>
+#    	      Wesley Wiedenmeier <magicalchicken@mail.magicalchicken.dnsdynamic.net>
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, version 3 of the License.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Bail immediately on errors!
+set -e
+
+error() {
+	printf "ERROR: %s\n" "$@" 1>&2
+	printf "ERROR: Beware, this escrow did NOT succeed!\n\n"
+	exit 1
+}
+
+PKG="zEscrow"
+
+# Bail out early, if this isn't an ecryptfs setup
+if [ ! -f "$HOME/.ecryptfs/wrapped-passphrase" ] || [ ! -f "$HOME/.ecryptfs/Private.sig" ]; then
+	error "Unable to find eCryptfs configuration at [$HOME/.ecryptfs/]"
+fi
+
+# Create our temp workspace in memory
+tempfile=$(mktemp --tmpdir=/dev/shm $PKG-XXXXXXXXXXXX.tar.gz.gpg)
+tempdir=$(mktemp -d /dev/shm/$PKG-XXXXXXXXXXXX)
+gpg_dir=$(mktemp -d /dev/shm/$PKG-XXXXXXXXXXXX)
+trap "(rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null) || true" EXIT HUP INT QUIT TERM
+
+if [ -z "$1" ]; then
+	# No server specified, prompt interactively
+    cat "/usr/share/$PKG/welcome-text"
+
+	# Get the zEscrow server
+	# NOTE: Use lower case "e" here, messes with SSL cert
+	default_server="https://zescrow.gazzang.com"
+	printf "Key escrow server [$default_server]: "
+	server=$(head -n1)
+else
+	# Looks like we got a server as a command argument
+	server="$1"
+fi
+[ -n "$server" ] || server="$default_server"
+
+# Ensure SSL
+if ! (echo "$server" | grep -qs "^https://"); then
+	error "For your security, this server URL must use an https server [$server]"
+fi
+
+# Get the zEscrow server public GPG key and import into temporary keyring
+gpg_opts="-q --yes --no-default-keyring --keyring ecryptfs --homedir $gpg_dir --status-fd 1"
+pubkey=$(curl -s -o- $server/gpg.pub) || error "Invalid key escrow server"
+status=$(printf "%s" "$pubkey" | gpg $gpg_opts --import) || error "Unable to import server public key"
+(printf "%s" "$status" | grep "^\[GNUPG:\] IMPORT_OK") || error "Server public key import failed"
+fingerprint=$(printf "%s" "$status" | grep -m1 "^\[GNUPG:\] IMPORT_OK" | awk '{print $4}')
+(printf "%s" "$fingerprint" | grep "^[0-9A-F]\{40,40\}$") || error "Invalid server fingerprint"
+(printf "%s:6:\n" ${fingerprint} | gpg $gpg_opts --import-ownertrust 2>/dev/null) || error "Invalid server fingerprint"
+
+# Copy .ecryptfs data to our temp dir
+# Except for the wrapped-passphrase file
+# Don't store the user's login passphrase
+# But only their random mount passphrase
+mkdir -m 700 -p "$tempdir/ecryptfs"
+cp -af "$HOME"/.ecryptfs/. "$tempdir"/ecryptfs/
+rm -f "$tempdir/ecryptfs/wrapped-passphrase"
+touch "$tempdir/ecryptfs/unwrapped-passphrase"
+chmod 600 "$tempdir/ecryptfs/unwrapped-passphrase"
+
+if [ -t 0 ]; then
+	# Interactively prompt for login passphrase
+    cat "/usr/share/$PKG/password-text"
+
+	# Store the stty, which we modify
+	stty_orig=$(stty -g)
+	trap "(stty $stty_orig; rm -rf $tempfile $tempdir $gpg_dir 2>/dev/null) || true" EXIT HUP INT QUIT TERM
+	stty -echo
+	printf "Your LOGIN passphrase: "
+	passphrase=$(head -n1)
+	stty $stty_orig
+	printf "\n"
+else
+	# Wrapping passphrase is on stdin
+	passphrase=$(cat /dev/stdin)
+fi
+
+# Catch blank passphrases
+if [ -z $passphrase ]; then
+    error "Missing passphrase."
+fi
+
+if !(printf "%s" "$passphrase" | ecryptfs-unwrap-passphrase "$HOME/.ecryptfs/wrapped-passphrase" - > "$tempdir/ecryptfs/unwrapped-passphrase"); then
+	error "Failed to unwrap passphrase.  Incorrect LOGIN passphrase?"
+fi
+touch -r "$HOME/.ecryptfs/wrapped-passphrase" "$tempdir/ecryptfs/unwrapped-passphrase"
+touch -r "$HOME/.ecryptfs/" "$tempdir/ecryptfs/"
+
+# Create our encrypted ascii-armored tarball
+tar -C "$tempdir" -zcvf - "ecryptfs" | gpg $gpg_opts -a -e -r 0x$fingerprint 2>/dev/null > "$tempfile"
+md5_1=$(tar -C "$tempdir" -zcf - "ecryptfs" | md5sum | awk '{print $1}')
+rm -rf "$tempdir" "$gpg_dir"
+
+# Push to the escrow server
+for i in $(seq 1 30); do
+	# Auto retry for up to 30 seconds
+	if url=$(curl -s -o- -X POST --data-urlencode payload@"$tempfile" $server/deposit/index.html) && [ -n "$url" ];then
+		break
+	else
+		sleep 1
+	fi
+done
+rm -f "$tempfile"
+[ -n "$url" ] || error "Failed to upload to server"
+
+# Check md5
+md5_2=$(printf "%s" "$url" | sed -e "s:.*=::" -e "s:-.*::")
+[ "$md5_1" = "$md5_2" ] || error "Data received by server [$md5_2] does not match data sent [$md5_1]"
+
+# Finish up
+if [ -z "$1" ]; then
+	echo "
+#####################################################################
+# To complete this escrow, you MUST go to this url, login,
+# and associate an email address with your upload IMMEDIATELY!
+#
+# $url
+#
+#####################################################################
+"
+	# Launch browser?
+	while true; do
+		printf "Go to [%s] now [Y/n]: " "$url"
+		answer=$(head -n1)
+		case "$answer" in
+			n*|N*)
+				exit 0
+			;;
+			Y*|y*)
+				exec sensible-browser $url
+			;;
+		esac
+	done
+else
+	printf "URL: $url\n"
+fi

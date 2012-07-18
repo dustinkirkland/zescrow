@@ -40,7 +40,7 @@ class zEscrowClient:
         """use the zEscrow script and draw the final window"""
         passwd = self.passwordEntry.get_text()
         pipe = subprocess.Popen(
-            ["zEscrow", self.serverName],
+            ["zEscrow-cli", self.serverName],
             stderr=subprocess.PIPE, stdout=subprocess.PIPE,
             stdin=subprocess.PIPE)
         stdout_value, stderr_value = pipe.communicate(
