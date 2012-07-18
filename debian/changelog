@@ -20,6 +20,8 @@ zescrow (1.4) unreleased; urgency=low
   * usr/bin/zEscrow, usr/bin/zEscrow-cli, usr/bin/zEscrow-graphical =>
     usr/bin/zEscrow-gui:
     - add a wrapper for the -cli and -gui
+  * debian/links:
+    - add a symlink for zescrow
 
   [ Wesley Wiedenmeier ]
   * === added directory usr/share/zEscrow, usr/bin/zEscrow,
