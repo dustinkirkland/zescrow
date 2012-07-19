@@ -1,6 +1,7 @@
 zescrow (1.5) unreleased; urgency=low
 
-  * UNRELEASED
+  * www/include/below.html:
+    - move banner up, link to gazzang.com, fix width
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 18 Jul 2012 18:27:33 -0500
 
