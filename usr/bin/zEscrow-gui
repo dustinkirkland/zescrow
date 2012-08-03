@@ -31,10 +31,28 @@ class zEscrowClient:
     passwordVBox = gtk.VBox(False, 2)
     finalVBox = gtk.VBox(False, 2)
     mainBox = gtk.VBox(False, 2)
+    menuBar = gtk.MenuBar()
 
     def destroy(self, widget):
         """destroy the window"""
         gtk.main_quit()
+
+    def create_menu(self):
+        """create the main menu bar"""
+        fileMenu = gtk.Menu()
+        fileM = gtk.MenuItem("File")
+        fileM.set_submenu(fileMenu)
+        helpMenu = gtk.Menu()
+        helpM = gtk.MenuItem("Help")
+        helpM.set_submenu(helpMenu)
+        about_button = gtk.MenuItem("About")
+        about_button.connect("activate", self.about)
+        helpMenu.append(about_button)
+        quit = gtk.MenuItem("Quit")
+        quit.connect("activate", self.destroy)
+        fileMenu.append(quit)
+        self.menuBar.append(fileM)
+        self.menuBar.append(helpM)
 
     def use_script(self, widget):
         """use the zEscrow script and draw the final window"""
@@ -47,6 +65,12 @@ class zEscrowClient:
             self.passwordEntry.get_text().encode('utf-8'))
         output = stdout_value.decode('utf-8')
         errValue = stderr_value.decode('utf-8')
+        self.passwordVBox.destroy()
+        self.create_menu()
+        self.finalVBox.pack_start(self.menuBar, False, False, 0)
+        logoImage = gtk.Image()
+        logoImage.set_from_file("/usr/share/zEscrow/gazzang_logo.png")
+        self.finalVBox.pack_start(logoImage, False, False, 0)
         okButton = gtk.Button("Ok")
         if pipe.returncode == 0:
             if re.search('^URL:.https:.*$', output, re.M):
@@ -72,33 +96,38 @@ Just click on the link below and sign in. Thank You."""
                     okButton.connect("clicked", self.destroy)
                 else:
                     finalText = "An error has occured:\n" + errValue \
-                        + "\n Please try again."
+                        + "\nPlease try again."
                     finalLabel = gtk.Label(finalText)
                     finalLabel.set_line_wrap(True)
                     self.finalVBox.pack_start(finalLabel, True, True, 0)
                     okButton.connect("clicked", self.draw_main_window)
             else:
                 finalText = "An error has occured:\n" + errValue \
-                    + "\n Please try again."
+                    + "\nPlease try again."
                 finalLabel = gtk.Label(finalText)
                 finalLabel.set_line_wrap(True)
                 self.finalVBox.pack_start(finalLabel, True, True, 0)
                 okButton.connect("clicked", self.draw_main_window)
         else:
             finalText = "An error has occured:\n" + errValue \
-                + "\n Please try again."
+                + "\nPlease try again."
             finalLabel = gtk.Label(finalText)
             finalLabel.set_line_wrap(True)
             self.finalVBox.pack_start(finalLabel, True, True, 0)
             okButton.connect("clicked", self.draw_main_window)
         self.finalVBox.pack_start(okButton, False, False, 0)
-        self.passwordVBox.destroy()
         self.window.add(self.finalVBox)
         self.window.show_all()
 
     def ask_for_password(self, widget):
         """draw the window asking for the login passphrase"""
         self.serverName = self.serverNameEntry.get_text()
+        self.mainBox.destroy()
+        self.create_menu()
+        self.passwordVBox.pack_start(self.menuBar, False, False, 0)
+        logoImage = gtk.Image()
+        logoImage.set_from_file("/usr/share/zEscrow/gazzang_logo.png")
+        self.passwordVBox.pack_start(logoImage, False, False, 0)
         f = open("/usr/share/zEscrow/password-text", "r")
         passwordAskingText = f.read()
         passwordAskingText = re.sub("#", "", passwordAskingText)
@@ -117,12 +146,15 @@ Just click on the link below and sign in. Thank You."""
         quitButton.connect("clicked", self.draw_main_window)
         buttonsTable.attach(quitButton, 1, 2, 0, 1)
         self.passwordVBox.pack_start(buttonsTable, False, False, 0)
-        self.mainBox.destroy()
         self.window.add(self.passwordVBox)
         self.window.show_all()
 
     def about(self, widget):
         """draw the window containing legal information"""
+        aboutVBox = gtk.VBox(False, 2)
+        logoImage = gtk.Image()
+        logoImage.set_from_file("/usr/share/zEscrow/gazzang_logo.png")
+        aboutVBox.pack_start(logoImage, False, False, 0)
         aboutLabelText = """
 zEscrow - aka ecryptfs-escrow-private
 Copyright (C) 2012 Dustin Kirkland <dustin.kirkland@gmail.com>
@@ -146,7 +178,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         aboutLabel = gtk.Label(aboutLabelText)
         aboutLabel.set_line_wrap(True)
         okButton = gtk.Button("Ok")
-        aboutVBox = gtk.VBox(False, 2)
         aboutVBox.pack_start(aboutLabel, True, True, 0)
         aboutWindow = gtk.Window()
         okButton.connect(
@@ -161,27 +192,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         """draw main window"""
         self.finalVBox.destroy()
         self.passwordVBox.destroy()
-        menuBar = gtk.MenuBar()
 
-        fileMenu = gtk.Menu()
-        fileM = gtk.MenuItem("File")
-        fileM.set_submenu(fileMenu)
+        self.create_menu()
+        self.mainBox.pack_start(self.menuBar, False, False, 0)
 
-        helpMenu = gtk.Menu()
-        helpM = gtk.MenuItem("Help")
-        helpM.set_submenu(helpMenu)
-        about = gtk.MenuItem("About")
-        about.connect("activate", self.about)
-        helpMenu.append(about)
-
-        quit = gtk.MenuItem("Quit")
-        quit.connect("activate", self.destroy)
-        fileMenu.append(quit)
-
-        menuBar.append(fileM)
-        menuBar.append(helpM)
-
-        self.mainBox.pack_start(menuBar, False, False, 0)
+        logoImage = gtk.Image()
+        logoImage.set_from_file("/usr/share/zEscrow/gazzang_logo.png")
+        self.mainBox.pack_start(logoImage, False, False, 0)
 
         f = open("/usr/share/zEscrow/welcome-text", "r")
         mainMessageText = f.read()
@@ -218,6 +235,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     def __init__(self):
         """initiate and call func to draw main window"""
         self.window = gtk.Window()
+        icon_path = "/usr/share/zEscrow/key_64.png"
+        self.window.set_icon_from_file(icon_path)
         self.draw_main_window(gtk.Window())
 
     def main(self):
