@@ -1,4 +1,4 @@
-zescrow (1.5) unreleased; urgency=low
+zescrow (1.5-0ubuntu1) quantal; urgency=low
 
   [ Dustin Kirkland ]
   * www/include/below.html:
@@ -16,7 +16,7 @@ zescrow (1.5) unreleased; urgency=low
     usr/share/icons/hicolor/scalable/apps/zEscrow.svg:
     - add a desktop file and svg logo
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 18 Jul 2012 18:27:33 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 03 Aug 2012 15:45:52 -0500
 
 zescrow (1.4-0ubuntu1) quantal; urgency=low
 
