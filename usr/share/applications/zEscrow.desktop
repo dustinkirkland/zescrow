@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=zEscrow
+Comment=Backup eCryptfs configuration and mount passphrases
+Icon=zEscrow
+Exec=zEscrow-gui
+Terminal=false
+Type=Application
+Catagories=GNOME;GTK;System;Settings;

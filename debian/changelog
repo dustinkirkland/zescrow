@@ -1,10 +1,20 @@
 zescrow (1.5) unreleased; urgency=low
 
+  [ Dustin Kirkland ]
   * www/include/below.html:
     - move banner up, link to gazzang.com ztrustee, fix width
+
+  [ Wesley Wiedenmeier ]
   * usr/bin/zEscrow-gui, usr/share/zEscrow/gazzang_logo.png,
     usr/share/zEscrow/key_64.png:
     - add some Gazzang branding in the gtk interface
+  * === added directory usr/share/applications, === added directory
+    usr/share/icons, === added directory usr/share/icons/hicolor, ===
+    added directory usr/share/icons/hicolor/scalable, === added
+    directory usr/share/icons/hicolor/scalable/apps,
+    usr/share/applications/zEscrow.desktop,
+    usr/share/icons/hicolor/scalable/apps/zEscrow.svg:
+    - add a desktop file and svg logo
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Wed, 18 Jul 2012 18:27:33 -0500
 
