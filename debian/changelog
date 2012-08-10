@@ -1,4 +1,4 @@
-zescrow (1.6) unreleased; urgency=low
+zescrow (1.6-0ubuntu1) quantal; urgency=low
 
   [ Wesley Wiedenmeier ]
   * usr/bin/zEscrow-gui, usr/share/zEscrow/help.png:
@@ -7,7 +7,7 @@ zescrow (1.6) unreleased; urgency=low
       a) the server, b) the wrapping passphrase
     - add help bubbles with the extra text
 
- -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 03 Aug 2012 15:45:55 -0500
+ -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 10 Aug 2012 11:19:47 -0500
 
 zescrow (1.5-0ubuntu1) quantal; urgency=low
 
