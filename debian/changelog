@@ -1,6 +1,11 @@
 zescrow (1.6) unreleased; urgency=low
 
-  * UNRELEASED
+  [ Wesley Wiedenmeier ]
+  * usr/bin/zEscrow-gui, usr/share/zEscrow/help.png:
+    - drastically simplify the escrow process
+    - prompt up front for both pieces of information,
+      a) the server, b) the wrapping passphrase
+    - add help bubbles with the extra text
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 03 Aug 2012 15:45:55 -0500
 
