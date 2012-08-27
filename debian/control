@@ -3,7 +3,7 @@ Section: misc
 Priority: optional
 Maintainer: Dustin Kirkland <kirkland@ubuntu.com>
 Build-Depends: debhelper (>= 7.0.50~)
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 Homepage: http://launchpad.net/zEscrow
 
 Package: zescrow-client

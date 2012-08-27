@@ -1,6 +1,15 @@
 zescrow (1.7) unreleased; urgency=low
 
-  * UNRELEASED
+  [ Alessandro Menti ]
+  * Added missing AGPL 3 license text to debian/copyright. (LP: #974533)
+  * Bumped Standards-Version in debian/control.
+  * Added missing symlink from /usr/share/man/man1/zescrow.1.gz to zEscrow.1.gz
+    in the same directory.
+  * debian/patches/fix_desktop_file_typo.patch:
+   - Fixed typo in category name in the zEscrow.desktop file.
+
+  [ Andrew Starr-Bochicchio ]
+  * debian/copyright: Point to copy of GPL-3 in common licenses.
 
  -- Dustin Kirkland <kirkland@ubuntu.com>  Fri, 10 Aug 2012 11:19:50 -0500
 

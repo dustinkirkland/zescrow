@@ -5,4 +5,4 @@ Icon=zEscrow
 Exec=zEscrow-gui
 Terminal=false
 Type=Application
-Catagories=GNOME;GTK;System;Settings;
+Categories=GNOME;GTK;System;Settings;
